@@ -57,7 +57,16 @@
     <changeSet id="modifyData-lastModifiedBy" author="whisper">
         <dropColumn tableName="users" columnName="last_modified_by" />
         <addColumn tableName="users">
-            <column name="last_modified_by" type="timestamp" />
+            <column name="last_modified_by" type="bigint" />
         </addColumn>
+    </changeSet>
+    <changeSet id="change-column-password-name" author="whisper">
+        <renameColumn tableName="users" oldColumnName="password_hash" newColumnName="password"
+/>    </changeSet>
+    <changeSet id="change-id-user" author="whisper">
+        <modifyDataType tableName="users" columnName="id" newDataType="serial8"/>
+    </changeSet>
+    <changeSet id="add-auto-incretment" author="whisper">
+        <addAutoIncrement tableName="users" columnName="id"/>
     </changeSet>
 </databaseChangeLog>
