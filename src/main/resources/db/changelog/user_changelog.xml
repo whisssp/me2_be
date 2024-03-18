@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!-- Define changeset -->
+    <changeSet id="create-table-users" author="whisper">
+        <createTable tableName="users">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="first_name" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="middle_name" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="last_name" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="email" type="varchar(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password_hash" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(10)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="avatar" type="varchar(255)" />
+            <column name="last_login" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="email_validated" type="boolean">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add-audit-users" author="whisper">
+        <addColumn tableName="users">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+        <addColumn tableName="users">
+            <column name="created_by" type="bigint"/>
+        </addColumn>
+        <addColumn tableName="users">
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+        <addColumn tableName="users">
+            <column name="last_modified_by" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="modifyData-lastModifiedBy" author="whisper">
+        <dropColumn tableName="users" columnName="last_modified_by" />
+        <addColumn tableName="users">
+            <column name="last_modified_by" type="timestamp" />
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
