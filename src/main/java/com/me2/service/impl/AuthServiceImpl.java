@@ -1,11 +1,14 @@
 package com.me2.service.impl;
 
 import com.me2.controller.vm.LoginVM;
+import com.me2.controller.vm.UserEntityVM;
 import com.me2.entity.CustomUserDetails;
 import com.me2.repository.UserRepository;
 import com.me2.service.AuthService;
 import com.me2.service.UserDetailsServiceExt;
+import com.me2.service.UserService;
 import com.me2.service.dto.LoginDTO;
+import com.me2.service.dto.UserDTO;
 import com.me2.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,10 +25,10 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
-    private UserDetailsServiceExt userDetailsServiceExt;
+    private final UserDetailsServiceExt userDetailsServiceExt;
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
 
     @Autowired
     private final AuthenticationManager authenticationManager;
@@ -32,9 +36,19 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private final JwtUtil jwtUtil;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthServiceImpl(UserDetailsServiceExt userDetailsServiceExt,
+                           UserService userService,
+                           AuthenticationManager authenticationManager,
+                           JwtUtil jwtUtil,
+                           PasswordEncoder passwordEncoder) {
+        this.userDetailsServiceExt = userDetailsServiceExt;
+        this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -53,4 +67,12 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtUtil.generateToken(userDetails);
         return new LoginVM(token);
     }
+
+    @Override
+    public UserEntityVM register(UserDTO userDTO) {
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        return userService.create(userDTO);
+    }
+
+
 }

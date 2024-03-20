@@ -38,7 +38,7 @@ public class AuthController {
     public ResponseEntity<UserEntityVM> register(@Valid @RequestBody UserDTO userDTO) {
         log.debug("Rest to register user account");
 
-        return ResponseEntity.ok(userService.create(userDTO));
+        return ResponseEntity.ok(authService.register(userDTO));
     }
 
     @PostMapping("/test")
