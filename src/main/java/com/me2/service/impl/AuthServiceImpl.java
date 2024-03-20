@@ -2,6 +2,7 @@ package com.me2.service.impl;
 
 import com.me2.controller.vm.LoginVM;
 import com.me2.entity.CustomUserDetails;
+import com.me2.repository.UserRepository;
 import com.me2.service.AuthService;
 import com.me2.service.dto.LoginDTO;
 import com.me2.util.JwtUtil;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class AuthServiceImpl implements AuthService {
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private final AuthenticationManager authenticationManager;
@@ -31,13 +34,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public LoginVM login(LoginDTO loginDTO) {
+        log.info("Request to Login with: {}", loginDTO.toString());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginDTO.getUsername(), loginDTO.getPassword());
-
+                userRepository.findFirstByEmail(loginDTO.getUsername()).getId(), loginDTO.getPassword());
+        log.info("Request to Login with: {}", authenticationToken.toString());
         try {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
+            System.out.println(authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (BadCredentialsException e) {
+            log.error("Err/Login: {}", e.getMessage());
             throw new BadCredentialsException("Invalid Username or Password!");
         }
         CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

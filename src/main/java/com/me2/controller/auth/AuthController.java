@@ -43,8 +43,8 @@ public class AuthController {
 
     @PostMapping("/test")
     public ResponseEntity<String> test() {
-        log.debug("Rest to logined user account");
+        log.debug("Rest to login user account");
 
-        return ResponseEntity.ok("Logined");
+        return ResponseEntity.ok("Login");
     }
 }
