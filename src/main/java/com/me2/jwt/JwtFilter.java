@@ -1,6 +1,7 @@
 package com.me2.jwt;
 
 import com.me2.entity.UserEntity;
+import com.me2.service.UserDetailsServiceExt;
 import com.me2.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,13 +29,13 @@ public class JwtFilter extends OncePerRequestFilter {
     public static final String BEARER_SUFFIX = "Bearer";
 
     @Autowired
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceExt userDetailsServiceExt;
 
     @Autowired
     private final JwtUtil jwtUtil;
 
-    public JwtFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil) {
-        this.userDetailsService = userDetailsService;
+    public JwtFilter(UserDetailsServiceExt userDetailsServiceExt, JwtUtil jwtUtil) {
+        this.userDetailsServiceExt = userDetailsServiceExt;
         this.jwtUtil = jwtUtil;
     }
 
@@ -78,7 +79,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private UserDetails getUserDetails(String token) {
-        return userDetailsService.loadUserByUsername(jwtUtil.getSubject(token));
+        return userDetailsServiceExt.loadUserById(jwtUtil.getSubject(token));
     }
 
     private String getToken(HttpServletRequest request) {

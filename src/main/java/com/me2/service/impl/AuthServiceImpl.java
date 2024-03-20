@@ -4,6 +4,7 @@ import com.me2.controller.vm.LoginVM;
 import com.me2.entity.CustomUserDetails;
 import com.me2.repository.UserRepository;
 import com.me2.service.AuthService;
+import com.me2.service.UserDetailsServiceExt;
 import com.me2.service.dto.LoginDTO;
 import com.me2.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,10 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class AuthServiceImpl implements AuthService {
+
+    @Autowired
+    private UserDetailsServiceExt userDetailsServiceExt;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -36,11 +41,9 @@ public class AuthServiceImpl implements AuthService {
     public LoginVM login(LoginDTO loginDTO) {
         log.info("Request to Login with: {}", loginDTO.toString());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                userRepository.findFirstByEmail(loginDTO.getUsername()).getId(), loginDTO.getPassword());
-        log.info("Request to Login with: {}", authenticationToken.toString());
+                userDetailsServiceExt.loadUserByUsername(loginDTO.getUsername()), loginDTO.getPassword());
         try {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            System.out.println(authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (BadCredentialsException e) {
             log.error("Err/Login: {}", e.getMessage());
