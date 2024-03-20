@@ -1,5 +1,7 @@
 package com.me2.entity;
 
+import com.me2.enums.EnumUserAccountStatus;
+import com.me2.enums.EnumUserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,6 +49,14 @@ public class UserEntity implements Serializable {
     @Basic
     @Column(name = "email_validated", nullable = true)
     private Boolean emailValidated;
+    @Basic
+    @Column(name = "role", nullable = true)
+    @Enumerated(EnumType.STRING)
+    private EnumUserRole role;
+    @Basic
+    @Column(name = "status", nullable = true)
+    @Enumerated(EnumType.STRING)
+    private EnumUserAccountStatus status;
 
     @Override
     public boolean equals(Object o) {
