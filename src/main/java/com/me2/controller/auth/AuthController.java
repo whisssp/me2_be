@@ -1,6 +1,8 @@
 package com.me2.controller.auth;
 
+import com.me2.controller.vm.LoginVM;
 import com.me2.controller.vm.UserEntityVM;
+import com.me2.service.AuthService;
 import com.me2.service.UserService;
 import com.me2.service.dto.LoginDTO;
 import com.me2.service.dto.UserDTO;
@@ -18,13 +20,18 @@ public class AuthController {
     @Autowired
     private final UserService userService;
 
-    public AuthController(UserService userService) {
+    @Autowired
+    private final AuthService authService;
+
+    public AuthController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<String> doAuthenticate(@RequestBody LoginDTO loginDTO) {
-        return ResponseEntity.ok(loginDTO.toString());
+    @PostMapping("/login")
+    public ResponseEntity<LoginVM> doLogin(@RequestBody LoginDTO loginDTO) {
+        log.info("Rest to login with: {}", loginDTO.toString());
+        return ResponseEntity.ok(authService.login(loginDTO));
     }
 
     @PostMapping("/register")
@@ -32,5 +39,12 @@ public class AuthController {
         log.debug("Rest to register user account");
 
         return ResponseEntity.ok(userService.create(userDTO));
+    }
+
+    @PostMapping("/test")
+    public ResponseEntity<String> test() {
+        log.debug("Rest to logined user account");
+
+        return ResponseEntity.ok("Logined");
     }
 }

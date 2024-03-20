@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Kiểm tra xem user có tồn tại trong database không?
-        UserEntity user = userRepository.findFirstByEmail(username);
+        UserEntity user = userRepository.findById(Long.parseLong(username)).orElse(null);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
