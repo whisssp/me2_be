@@ -10,7 +10,7 @@
     <!-- Define changeset -->
     <changeSet id="create-table-products" author="whisper">
         <createTable tableName="products">
-            <column name="id" type="serial8">
+            <column name="id" type="serial8" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="category_id" type="bigint">

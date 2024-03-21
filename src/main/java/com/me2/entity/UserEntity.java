@@ -3,25 +3,26 @@ package com.me2.entity;
 import com.me2.enums.EnumUserAccountStatus;
 import com.me2.enums.EnumUserRole;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-@Setter
+
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Setter
 @Entity
 @Table(name = "users", schema = "public", catalog = "me2_db")
-@ToString
-public class UserEntity implements Serializable {
+public class UserEntity extends AbstractAuditEntity<Long> implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    private long id;
+    private Long id;
     @Basic
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
@@ -50,11 +51,11 @@ public class UserEntity implements Serializable {
     @Column(name = "email_validated", nullable = true)
     private Boolean emailValidated;
     @Basic
-    @Column(name = "role", nullable = true)
+    @Column(name = "role", nullable = true, length = 255)
     @Enumerated(EnumType.STRING)
     private EnumUserRole role;
     @Basic
-    @Column(name = "status", nullable = true)
+    @Column(name = "status", nullable = true, length = 255)
     @Enumerated(EnumType.STRING)
     private EnumUserAccountStatus status;
 
