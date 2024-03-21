@@ -3,7 +3,7 @@ package com.me2.service.impl;
 import com.me2.controller.vm.LoginVM;
 import com.me2.controller.vm.UserEntityVM;
 import com.me2.entity.CustomUserDetails;
-import com.me2.repository.UserRepository;
+import com.me2.enums.EnumUserRole;
 import com.me2.service.AuthService;
 import com.me2.service.UserDetailsServiceExt;
 import com.me2.service.UserService;
@@ -69,9 +69,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserEntityVM register(UserDTO userDTO) {
+    public UserEntityVM register(UserDTO userDTO, EnumUserRole role) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        return userService.create(userDTO);
+        return userService.save(userDTO, role);
     }
 
 

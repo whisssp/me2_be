@@ -69,14 +69,16 @@
     <changeSet id="add-auto-incretment" author="whisper">
         <addAutoIncrement tableName="users" columnName="id"/>
     </changeSet>
-    <changeSet id="add-column-role-and-status-in-users" author="gwen">
-        <sql>CREATE TYPE role_user AS ENUM ('ADMIN','USER','ANONYMOUS')</sql>
+    <changeSet id="add-column-role-and-status" author="gwen">
         <addColumn tableName="users">
-            <column name="role" type="role_user"/>
+            <column name="role" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
         </addColumn>
-        <sql>CREATE TYPE status_user AS ENUM ('ACTIVATED','DELETED')</sql>
         <addColumn tableName="users">
-            <column name="status" type="status_user"/>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
         </addColumn>
     </changeSet>
 

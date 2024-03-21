@@ -1,5 +1,6 @@
 package com.me2.config;
 
+import com.me2.enums.EnumUserRole;
 import com.me2.jwt.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -40,9 +41,18 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((auth) -> auth.requestMatchers(HttpMethod.POST, "/api/v0/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/v0/auth/login").permitAll()
-                        .requestMatchers("/api/v0/auth/test").authenticated()
+                .authorizeHttpRequests((auth) ->
+                        auth.
+                        // public
+                        // customer - authentication
+                        requestMatchers(HttpMethod.POST, "/api/v0/customer/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v0/customer/authenticate").permitAll()
+                        .requestMatchers("/api/v0/customer/test").hasAuthority(EnumUserRole.USER.name())
+                        // admin - authenticaton
+                        .requestMatchers(HttpMethod.POST,"/api/v0/admin/register").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v0/admin/authenticate").permitAll()
+                        .requestMatchers("/api/v0/admin/test").hasAuthority(EnumUserRole.ADMIN.name())
+
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(withDefaults());

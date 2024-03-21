@@ -1,6 +1,7 @@
 package com.me2.service;
 
-import com.me2.controller.mapper.UserEntityVMMapper;
+import com.me2.entity.UserEntity;
+import com.me2.enums.EnumUserRole;
 import com.me2.service.dto.UserDTO;
 import com.me2.controller.vm.UserEntityVM;
 import org.springframework.data.domain.Page;
@@ -8,7 +9,7 @@ import org.springframework.data.domain.Page;
 public interface UserService {
 
 
-    UserEntityVM create(UserDTO userDTO);
+    UserEntityVM save(UserDTO userDTO, EnumUserRole role);
 
     UserEntityVM update(UserDTO info);
 
