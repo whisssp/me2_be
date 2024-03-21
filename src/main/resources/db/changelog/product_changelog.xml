@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!-- Define changeset -->
+    <changeSet id="create-table-products" author="whisper">
+        <createTable tableName="products">
+            <column name="id" type="serial8">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="category_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="promotion_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="summary" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="price" type="decimal(9,2)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="poster" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_by" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_by" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="products"
+                baseColumnNames="category_id"
+                constraintName="fk_category_id_products"
+                referencedTableName="categories"
+                referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint
+                baseTableName="products"
+                baseColumnNames="promotion_id"
+                constraintName="fk_promotion_id_products"
+                referencedTableName="promotions"
+                referencedColumnNames="id"
+        />
+    </changeSet>
+
+</databaseChangeLog>
