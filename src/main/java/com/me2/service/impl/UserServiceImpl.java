@@ -2,6 +2,7 @@ package com.me2.service.impl;
 
 import com.me2.controller.mapper.UserEntityVMMapper;
 import com.me2.entity.UserEntity;
+import com.me2.enums.EnumUserRole;
 import com.me2.repository.UserRepository;
 import com.me2.service.UserService;
 import com.me2.service.dto.UserDTO;
@@ -33,9 +34,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntityVM create(UserDTO userDTO) {
-        log.debug("Request register new account: {}", userDTO);
+    public UserEntityVM save(UserDTO userDTO, EnumUserRole role) {
+        log.debug("Request register new account: {} - role: {}", userDTO, role != null ? role : EnumUserRole.USER);
         UserEntity newUser = userMapper.toEntity(userDTO);
+        newUser.setRole(role != null ? role : EnumUserRole.USER);
         return userEntityVMMapper.toDto(userRepository.save(newUser));
     }
 
