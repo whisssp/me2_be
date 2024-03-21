@@ -10,7 +10,7 @@
     <!-- Define changeset -->
     <changeSet id="create-table-orders" author="whisper">
         <createTable tableName="orders">
-            <column name="id" type="serial8">
+            <column name="id" type="serial8" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="recipient_id" type="bigint">
