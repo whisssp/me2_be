@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!-- Define changeset -->
+    <changeSet id="create-table-orders" author="whisper">
+        <createTable tableName="orders">
+            <column name="id" type="serial8">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="recipient_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="promotion_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="payment_method" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_status" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_by" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_by" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+    <changeSet id="add-constraint-foreign-key" author="whisper">
+        <addForeignKeyConstraint
+                baseTableName="orders"
+                baseColumnNames="recipient_id"
+                constraintName="fk_recipient_id_orders"
+                referencedTableName="recipients"
+                referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint
+                baseTableName="orders"
+                baseColumnNames="user_id"
+                constraintName="fk_user_id_orders"
+                referencedTableName="users"
+                referencedColumnNames="id"
+        />
+        <addForeignKeyConstraint
+                baseTableName="orders"
+                baseColumnNames="promotion_id"
+                constraintName="fk_promotion_id_orders"
+                referencedTableName="promotions"
+                referencedColumnNames="id"
+        />
+    </changeSet>
+
+</databaseChangeLog>
