@@ -1,7 +1,7 @@
 package com.me2.entity;
 
-import com.me2.enums.EnumPromotionStatus;
-import com.me2.enums.EnumPromotionType;
+import com.me2.global.enums.EnumPromotionStatus;
+import com.me2.global.enums.EnumPromotionType;
 import jakarta.persistence.*;
 import lombok.*;
 

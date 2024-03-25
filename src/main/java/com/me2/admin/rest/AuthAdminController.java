@@ -1,16 +1,15 @@
-package com.me2.controller.admin;
+package com.me2.admin.rest;
 
-import com.me2.controller.vm.LoginVM;
-import com.me2.controller.vm.UserEntityVM;
-import com.me2.enums.EnumUserRole;
+import com.me2.web.vm.LoginVM;
+import com.me2.web.vm.UserEntityVM;
+import com.me2.global.enums.EnumUserRole;
 import com.me2.service.AuthService;
 import com.me2.service.UserService;
-import com.me2.service.dto.LoginDTO;
+import com.me2.web.dto.LoginDTO;
 import com.me2.service.dto.UserDTO;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

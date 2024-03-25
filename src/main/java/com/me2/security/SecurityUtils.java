@@ -1,6 +1,6 @@
 package com.me2.security;
 
-import com.me2.enums.EnumUserRole;
+import com.me2.global.enums.EnumUserRole;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
