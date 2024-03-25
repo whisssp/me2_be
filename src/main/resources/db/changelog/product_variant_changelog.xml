@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!-- Define changeset -->
+    <changeSet id="create-table-product_variants" author="whisper">
+        <createTable tableName="product_variants">
+            <column name="id" type="serial8" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="product_id" type="bigint" defaultOnNull="true">
+                <constraints nullable="false" />
+            </column>
+            <column name="size" type="varchar(5)">
+                <constraints nullable="false" />
+            </column>
+            <column name="color" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sku" type="varchar(30)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="name" type="varchar(250)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="created_by" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_by" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="product_variants"
+                baseColumnNames="product_id"
+                constraintName="fk_product_id_products_variants"
+                referencedTableName="products"
+                referencedColumnNames="id"
+        />
+    </changeSet>
+
+</databaseChangeLog>

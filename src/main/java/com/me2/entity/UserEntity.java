@@ -1,12 +1,11 @@
 package com.me2.entity;
 
-import com.me2.enums.EnumUserAccountStatus;
-import com.me2.enums.EnumUserRole;
+import com.me2.global.enums.EnumUserAccountStatus;
+import com.me2.global.enums.EnumUserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.time.Instant;
 
 

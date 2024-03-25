@@ -11,4 +11,8 @@
     <include file="/db/changelog/category_changelog.xml"/>
     <include file="/db/changelog/product_changelog.xml"/>
     <include file="/db/changelog/add_audit.xml"/>
+    <include file="/db/changelog/product_variant_changelog.xml"/>
+    <include file="/db/changelog/product_gallery_changelog.xml"/>
+    <include file="/db/changelog/cart_changelog.xml"/>
+    <include file="/db/changelog/cart_item_changelog.xml"/>
 </databaseChangeLog>

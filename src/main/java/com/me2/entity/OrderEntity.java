@@ -1,12 +1,18 @@
 package com.me2.entity;
 
-import com.me2.enums.EnumOrderStatus;
-import com.me2.enums.EnumPaymentMethod;
-import com.me2.enums.EnumPaymentStatus;
+import com.me2.global.enums.EnumOrderStatus;
+import com.me2.global.enums.EnumPaymentMethod;
+import com.me2.global.enums.EnumPaymentStatus;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serializable;
 
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "orders", schema = "public", catalog = "me2_db")
 public class OrderEntity extends AbstractAuditEntity implements Serializable {
