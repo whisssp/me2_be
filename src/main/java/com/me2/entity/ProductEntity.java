@@ -1,6 +1,6 @@
 package com.me2.entity;
 
-import com.me2.enums.EnumProductStatus;
+import com.me2.global.enums.EnumProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

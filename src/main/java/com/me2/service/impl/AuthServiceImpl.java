@@ -1,13 +1,13 @@
 package com.me2.service.impl;
 
-import com.me2.controller.vm.LoginVM;
-import com.me2.controller.vm.UserEntityVM;
+import com.me2.web.vm.LoginVM;
+import com.me2.web.vm.UserEntityVM;
 import com.me2.entity.CustomUserDetails;
-import com.me2.enums.EnumUserRole;
+import com.me2.global.enums.EnumUserRole;
 import com.me2.service.AuthService;
 import com.me2.service.UserDetailsServiceExt;
 import com.me2.service.UserService;
-import com.me2.service.dto.LoginDTO;
+import com.me2.web.dto.LoginDTO;
 import com.me2.service.dto.UserDTO;
 import com.me2.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
