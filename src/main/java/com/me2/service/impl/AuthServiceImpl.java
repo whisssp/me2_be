@@ -5,7 +5,7 @@ import com.me2.web.vm.UserEntityVM;
 import com.me2.entity.CustomUserDetails;
 import com.me2.global.enums.EnumUserRole;
 import com.me2.service.AuthService;
-import com.me2.service.UserDetailsServiceExt;
+import com.me2.service.UserDetailsExtService;
 import com.me2.service.UserService;
 import com.me2.web.dto.LoginDTO;
 import com.me2.service.dto.UserDTO;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     @Autowired
-    private final UserDetailsServiceExt userDetailsServiceExt;
+    private final UserDetailsExtService userDetailsServiceExt;
 
     @Autowired
     private final UserService userService;
@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private final PasswordEncoder passwordEncoder;
 
-    public AuthServiceImpl(UserDetailsServiceExt userDetailsServiceExt,
+    public AuthServiceImpl(UserDetailsExtService userDetailsServiceExt,
                            UserService userService,
                            AuthenticationManager authenticationManager,
                            JwtUtil jwtUtil,

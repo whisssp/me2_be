@@ -3,19 +3,19 @@ package com.me2.service.impl;
 import com.me2.entity.CustomUserDetails;
 import com.me2.entity.UserEntity;
 import com.me2.repository.UserRepository;
-import com.me2.service.UserDetailsServiceExt;
+import com.me2.service.UserDetailsExtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDetailsServiceExtImpl implements UserDetailsServiceExt {
+public class UserDetailsExtServiceImpl implements UserDetailsExtService {
 
     @Autowired
     private final UserRepository userRepository;
 
-    public UserDetailsServiceExtImpl(UserRepository userRepository) {
+    public UserDetailsExtServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
