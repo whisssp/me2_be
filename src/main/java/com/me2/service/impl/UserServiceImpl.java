@@ -8,6 +8,7 @@ import com.me2.service.dto.UserDTO;
 import com.me2.web.mapper.UserVMMapper;
 import com.me2.web.vm.UserEntityVM;
 import com.me2.service.mapper.UserMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntityVM getOneUserById(Long id) {
-        return null;
+        return userVMMapper.toDto(userRepository.findById(id).orElseThrow(EntityNotFoundException::new));
     }
 
     @Override

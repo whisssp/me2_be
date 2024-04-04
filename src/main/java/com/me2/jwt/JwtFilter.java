@@ -1,7 +1,6 @@
 package com.me2.jwt;
 
-import com.me2.entity.UserEntity;
-import com.me2.service.UserDetailsServiceExt;
+import com.me2.service.UserDetailsExtService;
 import com.me2.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,13 +27,13 @@ public class JwtFilter extends OncePerRequestFilter {
     public static final String BEARER_SUFFIX = "Bearer";
 
     @Autowired
-    private final UserDetailsServiceExt userDetailsServiceExt;
+    private final UserDetailsExtService userDetailsExtService;
 
     @Autowired
     private final JwtUtil jwtUtil;
 
-    public JwtFilter(UserDetailsServiceExt userDetailsServiceExt, JwtUtil jwtUtil) {
-        this.userDetailsServiceExt = userDetailsServiceExt;
+    public JwtFilter(UserDetailsExtService userDetailsExtService, JwtUtil jwtUtil) {
+        this.userDetailsExtService = userDetailsExtService;
         this.jwtUtil = jwtUtil;
     }
 
@@ -79,7 +77,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private UserDetails getUserDetails(String token) {
-        return userDetailsServiceExt.loadUserById(jwtUtil.getSubject(token));
+        return userDetailsExtService.loadUserById(jwtUtil.getSubject(token));
     }
 
     private String getToken(HttpServletRequest request) {

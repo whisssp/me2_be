@@ -18,10 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AuthAdminController {
 
-    @Autowired
     private final UserService userService;
 
-    @Autowired
     private final AuthService authService;
 
     public AuthAdminController(UserService userService, AuthService authService) {

@@ -9,6 +9,9 @@ import java.time.Instant;
 public class UserDTO {
 
     @NotNull
+    private Long id;
+
+    @NotNull
     private String firstName;
 
     private String middleName;
