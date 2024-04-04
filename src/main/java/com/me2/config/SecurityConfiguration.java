@@ -47,6 +47,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST,"/api/v0/admin/authenticate").permitAll()
                         .requestMatchers("/api/v0/admin/test").hasAuthority(EnumUserRole.ADMIN.name())
 
+                        // admin
+                                .requestMatchers(HttpMethod.GET, "api/v0/admin/account/**").hasAuthority(EnumUserRole.ADMIN.name())
+
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(withDefaults());
