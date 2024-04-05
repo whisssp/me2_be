@@ -48,7 +48,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/v0/admin/test").hasAuthority(EnumUserRole.ADMIN.name())
 
                         // admin
-                                .requestMatchers(HttpMethod.GET, "api/v0/admin/account/**").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "api/v0/admin/user/**").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "api/v0/admin/users/**").hasAuthority(EnumUserRole.ADMIN.name())
 
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
