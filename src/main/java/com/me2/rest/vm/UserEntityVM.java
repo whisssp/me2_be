@@ -1,4 +1,4 @@
-package com.me2.web.vm;
+package com.me2.rest.vm;
 
 import lombok.Data;
 

@@ -1,29 +1,30 @@
-package com.me2.admin.rest;
+package com.me2.rest.user;
 
-import com.me2.web.vm.LoginVM;
-import com.me2.web.vm.UserEntityVM;
-import com.me2.global.enums.EnumUserRole;
+import com.me2.rest.vm.LoginVM;
+import com.me2.rest.vm.UserEntityVM;
 import com.me2.service.AuthService;
-import com.me2.service.UserService;
-import com.me2.web.dto.LoginDTO;
+import com.me2.rest.dto.LoginDTO;
 import com.me2.service.dto.UserDTO;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v0/admin")
+@RequestMapping("/api/v0/customer")
 @Slf4j
-public class AuthAdminController {
+public class AuthCustomerController {
 
-    private final UserService userService;
 
+
+    @Autowired
     private final AuthService authService;
 
-    public AuthAdminController(UserService userService, AuthService authService) {
-        this.userService = userService;
+    public AuthCustomerController(AuthService authService) {
         this.authService = authService;
     }
 
@@ -36,7 +37,8 @@ public class AuthAdminController {
     @PostMapping("/register")
     public ResponseEntity<UserEntityVM> register(@Valid @RequestBody UserDTO userDTO) {
         log.debug("Rest to register user account");
-        return ResponseEntity.ok(authService.register(userDTO, EnumUserRole.ADMIN));
+
+        return ResponseEntity.ok(authService.register(userDTO, null));
     }
 
     @PostMapping("/test")
