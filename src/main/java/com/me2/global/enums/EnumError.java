@@ -4,7 +4,9 @@ public enum EnumError {
 
     USER_NOT_FOUND("users", "NotFound", ""),
 
-    USER_EXIST("users", "Exist", "");
+    USER_EXIST("users", "Exist", ""),
+
+    UPLOAD_MEDIA_FAILED("media", "UploadFailed", "");
 
     private String entity;
 

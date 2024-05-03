@@ -25,11 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
     public static final String BEARER_SUFFIX = "Bearer";
-
-    @Autowired
     private final UserDetailsExtService userDetailsExtService;
-
-    @Autowired
     private final JwtUtil jwtUtil;
 
     public JwtFilter(UserDetailsExtService userDetailsExtService, JwtUtil jwtUtil) {
