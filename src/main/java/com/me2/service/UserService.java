@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-
     UserEntityVM save(UserDTO userDTO, EnumUserRole role);
 
     UserEntityVM update(UserUpdateDTO info);
