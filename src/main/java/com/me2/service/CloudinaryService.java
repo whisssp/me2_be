@@ -1,12 +1,15 @@
 package com.me2.service;
 
+import com.me2.entity.Media;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
+import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
+
 
 public interface CloudinaryService {
 
-    Map upload(MultipartFile file);
+List<Media> upload(List<MultipartFile> file);
 
 
 }
