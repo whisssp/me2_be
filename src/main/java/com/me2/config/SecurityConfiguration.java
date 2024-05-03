@@ -20,10 +20,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 public class SecurityConfiguration {
 
-    @Autowired
     private final JwtFilter jwtFilter;
 
-    @Autowired
     private final AuthenticationConfiguration configuration;
 
     public SecurityConfiguration(JwtFilter jwtFilter, AuthenticationConfiguration configuration) {
@@ -38,8 +36,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((auth) ->
                         auth.
                         // public
+                        requestMatchers(HttpMethod.POST, "/api/v0/media/public/upload/image").permitAll()
                         // customer - authentication
-                        requestMatchers(HttpMethod.POST, "/api/v0/customer/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v0/customer/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v0/customer/authenticate").permitAll()
                         .requestMatchers("/api/v0/customer/test").hasAuthority(EnumUserRole.USER.name())
                         // admin - authenticaton
@@ -49,6 +48,8 @@ public class SecurityConfiguration {
 
                         // admin
                         .requestMatchers(HttpMethod.GET, "api/v0/admin/user/**").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "api/v0/admin/user/**").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "api/v0/admin/user/**").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "api/v0/admin/users/**").hasAuthority(EnumUserRole.ADMIN.name())
 
                 )
