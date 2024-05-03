@@ -4,11 +4,12 @@ import com.me2.entity.Media;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
+
 
 public interface CloudinaryService {
 
-    List<Media> upload(List<MultipartFile> file);
+List<Media> upload(List<MultipartFile> file);
 
 
 }

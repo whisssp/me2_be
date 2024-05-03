@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v0/media")
@@ -24,7 +23,7 @@ public class MediaResource {
     }
 
     @PostMapping({"/admin/upload/image", "/public/upload/image"})
-    public ResponseEntity<?> uploadImageForAdmin(@RequestParam("images") List<MultipartFile> file) {
+ public ResponseEntity<?> uploadImageForAdmin(@RequestParam("images") List<MultipartFile> file) {
         List<Media> data = this.cloudinaryService.upload(file);
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
