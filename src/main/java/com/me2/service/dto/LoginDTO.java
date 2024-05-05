@@ -1,4 +1,4 @@
-package com.me2.rest.dto;
+package com.me2.service.dto;
 
 import lombok.Getter;
 import lombok.Setter;

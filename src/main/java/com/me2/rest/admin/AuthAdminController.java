@@ -5,7 +5,7 @@ import com.me2.rest.vm.UserEntityVM;
 import com.me2.global.enums.EnumUserRole;
 import com.me2.service.AuthService;
 import com.me2.service.UserService;
-import com.me2.rest.dto.LoginDTO;
+import com.me2.service.dto.LoginDTO;
 import com.me2.service.dto.UserDTO;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
