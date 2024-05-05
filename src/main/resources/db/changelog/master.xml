@@ -15,4 +15,6 @@
     <include file="/db/changelog/product_gallery_changelog.xml"/>
     <include file="/db/changelog/cart_changelog.xml"/>
     <include file="/db/changelog/cart_item_changelog.xml"/>
+
+    <include file="/db/changelog/alter-audit.xml"/>
 </databaseChangeLog>
