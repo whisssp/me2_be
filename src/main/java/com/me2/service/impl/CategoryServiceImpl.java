@@ -74,8 +74,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryVM> getAll(Pageable pageable) {
         return null;
     }
-
-
+  
     private void saveCategories(List<CategoryDTO> categoryDTOList) {
         categoryDTOList.parallelStream().forEach(c -> {
             CategorieEntity entity = categoryMapper.toEntity(c);
