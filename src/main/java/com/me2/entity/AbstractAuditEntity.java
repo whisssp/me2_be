@@ -39,5 +39,4 @@ public abstract class AbstractAuditEntity<T> implements Serializable {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Instant lastModifiedDate = Instant.now();
-
 }

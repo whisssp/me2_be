@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!-- Define changeset -->
+    <changeSet id="alter-audit" author="whisper">
+        <modifyDataType tableName="addresses" columnName="created_by" newDataType="varchar(50)"></modifyDataType>
+        <modifyDataType tableName="addresses" columnName="last_modified_by" newDataType="varchar(50)"></modifyDataType>
+
+        <modifyDataType tableName="cart_items" columnName="created_by" newDataType="varchar(50)"></modifyDataType>
+        <modifyDataType tableName="cart_items" columnName="last_modified_by" newDataType="varchar(50)"></modifyDataType>
+
+        <modifyDataType tableName="carts" columnName="created_by" newDataType="varchar(50)"></modifyDataType>
+        <modifyDataType tableName="carts" columnName="last_modified_by" newDataType="varchar(50)"></modifyDataType>
+
+        <modifyDataType tableName="categories" columnName="created_by" newDataType="varchar(50)"></modifyDataType>
+        <modifyDataType tableName="categories" columnName="last_modified_by" newDataType="varchar(50)"></modifyDataType>
+
+        <modifyDataType tableName="orders" columnName="created_by" newDataType="varchar(50)"></modifyDataType>
+        <modifyDataType tableName="orders" columnName="last_modified_by" newDataType="varchar(50)"></modifyDataType>
+
+        <modifyDataType tableName="product_galleries" columnName="created_by" newDataType="varchar(50)"></modifyDataType>
+        <modifyDataType tableName="product_galleries" columnName="last_modified_by" newDataType="varchar(50)"></modifyDataType>
+
+        <modifyDataType tableName="product_variants" columnName="created_by" newDataType="varchar(50)"></modifyDataType>
+        <modifyDataType tableName="product_variants" columnName="last_modified_by" newDataType="varchar(50)"></modifyDataType>
+
+        <modifyDataType tableName="products" columnName="created_by" newDataType="varchar(50)"></modifyDataType>
+        <modifyDataType tableName="products" columnName="last_modified_by" newDataType="varchar(50)"></modifyDataType>
+
+        <modifyDataType tableName="promotions" columnName="created_by" newDataType="varchar(50)"></modifyDataType>
+        <modifyDataType tableName="promotions" columnName="last_modified_by" newDataType="varchar(50)"></modifyDataType>
+
+        <modifyDataType tableName="recipients" columnName="created_by" newDataType="varchar(50)"></modifyDataType>
+        <modifyDataType tableName="recipients" columnName="last_modified_by" newDataType="varchar(50)"></modifyDataType>
+    </changeSet>
+
+</databaseChangeLog>
