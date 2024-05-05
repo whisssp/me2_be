@@ -10,7 +10,7 @@ public interface CategoryService {
 
     void create(List<CategoryDTO> dtoList);
 
-    CategoryVM update(List<CategoryDTO> dtoList);
+    CategoryVM update(CategoryDTO dto);
 
     void delete(List<Long> ids);
 
