@@ -6,7 +6,9 @@ public enum EnumError {
 
     USER_EXIST("users", "Exist", ""),
 
-    UPLOAD_MEDIA_FAILED("media", "UploadFailed", "");
+    UPLOAD_MEDIA_FAILED("media", "UploadFailed", ""),
+
+    CATEGORY_NOT_FOUND("categories", "NotFound", "");
 
     private String entity;
 

@@ -1,10 +1,12 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "categories", schema = "public", catalog = "me2_db")
@@ -18,6 +20,7 @@ public class CategorieEntity extends AbstractAuditEntity<Long> implements Serial
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
+
     @Basic
     @Column(name = "parent_category_id", nullable = true)
     private Long parentCategoryId;
