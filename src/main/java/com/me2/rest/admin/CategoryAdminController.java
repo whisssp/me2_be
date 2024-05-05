@@ -1,14 +1,12 @@
 package com.me2.rest.admin;
 
+import com.me2.rest.vm.CategoryVM;
 import com.me2.service.CategoryService;
 import com.me2.service.dto.CategoryDTO;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +26,11 @@ public class CategoryAdminController {
         log.debug("REST to create categories");
         categoryService.create(listCategoryDTO);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/category")
+    public ResponseEntity<CategoryVM> update(@RequestBody @Valid CategoryDTO categoryDTO) {
+        log.debug("REST to update categories");
+        return ResponseEntity.ok(categoryService.update(categoryDTO));
     }
 }
