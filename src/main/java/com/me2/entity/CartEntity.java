@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,7 +13,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Entity
 @Table(name = "carts", schema = "public", catalog = "me2_db")
-public class CartEntity extends AbstractAuditEntity<Long> implements Serializable {
+public class CartEntity extends AbstractAuditEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -21,6 +21,9 @@ public class CartEntity extends AbstractAuditEntity<Long> implements Serializabl
     @Basic
     @Column(name = "user_id", nullable = true)
     private Long userId;
+
+    @OneToMany(mappedBy = "cartId", fetch = FetchType.LAZY)
+    private List<CartItemEntity> cartItemList;
 
     public Long getId() {
         return id;

@@ -1,5 +1,7 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.me2.global.enums.EnumPromotionStatus;
 import com.me2.global.enums.EnumPromotionType;
 import jakarta.persistence.*;
@@ -8,6 +10,7 @@ import lombok.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "promotions", schema = "public", catalog = "me2_db")
@@ -16,7 +19,7 @@ import java.time.Instant;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PromotionEntity extends AbstractAuditEntity<Long> implements Serializable {
+public class PromotionEntity extends AbstractAuditEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -41,6 +44,16 @@ public class PromotionEntity extends AbstractAuditEntity<Long> implements Serial
     @Basic
     @Column(name = "is_deleted", nullable = true)
     private Boolean isDeleted;
+
+    @OneToMany(mappedBy = "promotionId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<OrderEntity> orderList;
+
+    @OneToMany(mappedBy = "promotionId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<ProductEntity> productList;
 
     public Long getId() {
         return id;

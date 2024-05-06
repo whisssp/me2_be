@@ -1,9 +1,12 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @Table(name = "product_variants", schema = "public", catalog = "me2_db")
-public class ProductVariantEntity extends AbstractAuditEntity<Long> implements Serializable {
+public class ProductVariantEntity extends AbstractAuditEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -32,6 +35,23 @@ public class ProductVariantEntity extends AbstractAuditEntity<Long> implements S
     @Basic
     @Column(name = "name", nullable = true, length = 250)
     private String name;
+
+    @OneToMany(mappedBy = "productVariantId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<CartItemEntity> cartItemList;
+
+    @OneToMany(mappedBy = "productVariantId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<ProductGalleryEntity> productGalleryList;
+
+    @OneToMany(mappedBy = "productVariantId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<OrderDetailEntity> orderDetailList;
+
+
 
     public Long getId() {
         return id;

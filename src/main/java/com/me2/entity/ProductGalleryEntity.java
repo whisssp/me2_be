@@ -1,5 +1,6 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @Table(name = "product_galleries", schema = "public", catalog = "me2_db")
-public class ProductGalleryEntity extends AbstractAuditEntity<Long> implements Serializable {
+public class ProductGalleryEntity extends AbstractAuditEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -20,6 +21,7 @@ public class ProductGalleryEntity extends AbstractAuditEntity<Long> implements S
     @Basic
     @Column(name = "product_variant_id", nullable = false)
     private Long productVariantId;
+
     @Column(name = "images", nullable = false, length = 255)
     private String images;
 

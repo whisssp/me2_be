@@ -1,5 +1,6 @@
 package com.me2.jwt;
 
+import com.me2.entity.CustomUserDetails;
 import com.me2.service.UserDetailsExtService;
 import com.me2.util.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -61,7 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private void setAuthenticationContext(String token, HttpServletRequest request) {
-        UserDetails userDetails = getUserDetails(token);
+        CustomUserDetails userDetails = (CustomUserDetails) getUserDetails(token);
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
