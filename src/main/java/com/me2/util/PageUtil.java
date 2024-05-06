@@ -18,7 +18,7 @@ public class PageUtil<T> {
         }
         response.setPageSize(page.getSize());
         response.setPageNumber(page.getNumber());
-        response.setTotalElements(Integer.parseInt(page.getTotalElements() + ""));
+        response.setTotalElements(page.getTotalElements());
         response.setTotalPages(Integer.parseInt(page.getTotalPages() + ""));
 
         return response;

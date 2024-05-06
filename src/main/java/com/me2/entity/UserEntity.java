@@ -1,5 +1,7 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.me2.global.enums.EnumUserAccountStatus;
 import com.me2.global.enums.EnumUserRole;
 import jakarta.persistence.*;
@@ -7,6 +9,8 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
+import java.util.Set;
 
 
 @ToString
@@ -16,7 +20,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table(name = "users", schema = "public", catalog = "me2_db")
-public class UserEntity extends AbstractAuditEntity<Long> implements Serializable {
+public class UserEntity extends AbstractAuditEntity implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -57,6 +61,21 @@ public class UserEntity extends AbstractAuditEntity<Long> implements Serializabl
     @Column(name = "status", nullable = true, length = 255)
     @Enumerated(EnumType.STRING)
     private EnumUserAccountStatus status;
+
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<AddressEntity> addressList;
+
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private Set<CartEntity> cartList;
+
+    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private Set<OrderEntity> orderList;
 
     @Override
     public boolean equals(Object o) {

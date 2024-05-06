@@ -1,10 +1,12 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,7 +15,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Entity
 @Table(name = "recipients", schema = "public", catalog = "me2_db")
-public class RecipientEntity extends AbstractAuditEntity<Long> implements Serializable {
+public class RecipientEntity extends AbstractAuditEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -30,6 +32,11 @@ public class RecipientEntity extends AbstractAuditEntity<Long> implements Serial
     @Basic
     @Column(name = "address_id", nullable = false)
     private Long addressId;
+
+    @OneToMany(mappedBy = "recipientId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<OrderEntity> orderList;
 
     public Long getId() {
         return id;

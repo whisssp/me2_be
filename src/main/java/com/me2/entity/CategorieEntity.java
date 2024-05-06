@@ -1,21 +1,20 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
 @Table(name = "categories", schema = "public", catalog = "me2_db")
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategorieEntity extends AbstractAuditEntity<Long> implements Serializable {
+public class CategorieEntity extends AbstractAuditEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -24,6 +23,13 @@ public class CategorieEntity extends AbstractAuditEntity<Long> implements Serial
     @Basic
     @Column(name = "parent_category_id", nullable = true)
     private Long parentCategoryId;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "parent_category_id", insertable=false, updatable=false)
+//    @JsonBackReference
+//    @JsonIgnore
+//    private CategorieEntity parent;
+
     @Basic
     @Column(name = "slug", nullable = true, length = 255)
     private String slug;
@@ -33,6 +39,16 @@ public class CategorieEntity extends AbstractAuditEntity<Long> implements Serial
     @Basic
     @Column(name = "description", nullable = true, length = 255)
     private String description;
+
+    @OneToMany(mappedBy = "parentCategoryId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<CategorieEntity> children;
+
+    @OneToMany(mappedBy = "categoryId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<ProductEntity> products;
 
     public Long getId() {
         return id;
@@ -91,13 +107,13 @@ public class CategorieEntity extends AbstractAuditEntity<Long> implements Serial
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (parentCategoryId != null ? parentCategoryId.hashCode() : 0);
-        result = 31 * result + (slug != null ? slug.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        return result;
-    }
+//    @Override
+//    public int hashCode() {
+//        int result = (int) (id ^ (id >>> 32));
+//        result = 31 * result + (parentCategoryId != null ? parentCategoryId.hashCode() : 0);
+//        result = 31 * result + (slug != null ? slug.hashCode() : 0);
+//        result = 31 * result + (name != null ? name.hashCode() : 0);
+//        result = 31 * result + (description != null ? description.hashCode() : 0);
+//        return result;
+//    }
 }

@@ -13,7 +13,7 @@ public class Paginate<T> {
 
     private Integer totalPages;
 
-    private Integer totalElements;
+    private Long totalElements;
 
     private List<T> data;
 }

@@ -1,11 +1,14 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.me2.global.enums.EnumProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "products", schema = "public", catalog = "me2_db")
@@ -14,7 +17,7 @@ import java.math.BigDecimal;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductEntity extends AbstractAuditEntity<Long> implements Serializable {
+public class ProductEntity extends AbstractAuditEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -44,6 +47,11 @@ public class ProductEntity extends AbstractAuditEntity<Long> implements Serializ
     @Column(name = "status", nullable = false, length = 255)
     @Enumerated(EnumType.STRING)
     private EnumProductStatus status;
+
+    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<ProductVariantEntity> productVariantList;
 
     public Long getId() {
         return id;
