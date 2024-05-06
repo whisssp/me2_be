@@ -1,9 +1,12 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "addresses", schema = "public", catalog = "me2_db")
@@ -12,7 +15,7 @@ import java.io.Serializable;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressEntity extends AbstractAuditEntity<Long> implements Serializable {
+public class AddressEntity extends AbstractAuditEntity implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -42,6 +45,10 @@ public class AddressEntity extends AbstractAuditEntity<Long> implements Serializ
     @Basic
     @Column(name = "user_id", nullable = true)
     private Long userId;
+
+    @OneToMany(mappedBy = "addressId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Set<RecipientEntity> recipentList;
 
     public Long getId() {
         return id;

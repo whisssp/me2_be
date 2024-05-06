@@ -1,5 +1,7 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.me2.global.enums.EnumOrderStatus;
 import com.me2.global.enums.EnumPaymentMethod;
 import com.me2.global.enums.EnumPaymentStatus;
@@ -7,6 +9,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -41,6 +45,11 @@ public class OrderEntity extends AbstractAuditEntity implements Serializable {
     @Column(name = "status", nullable = false, length = 100)
     @Enumerated(EnumType.STRING)
     private EnumOrderStatus status;
+
+    @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JsonIgnore
+    private List<OrderDetailEntity> orderDetailList;
 
     public Long getId() {
         return id;
