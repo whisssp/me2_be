@@ -38,7 +38,7 @@ public class CategoryAdminController {
         log.debug("REST to update categories");
         return ResponseEntity.ok(categoryService.update(categoryDTO));
     }
-
+  
     @GetMapping("/category/{id}")
     public ResponseEntity<CategoryVM> getOne(@PathVariable("id") Long id) {
         log.debug("REST to get category by id: {}", id);

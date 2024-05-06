@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "categories", schema = "public", catalog = "me2_db")
@@ -23,12 +23,6 @@ public class CategorieEntity extends AbstractAuditEntity implements Serializable
     @Basic
     @Column(name = "parent_category_id", nullable = true)
     private Long parentCategoryId;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "parent_category_id", insertable=false, updatable=false)
-//    @JsonBackReference
-//    @JsonIgnore
-//    private CategorieEntity parent;
 
     @Basic
     @Column(name = "slug", nullable = true, length = 255)

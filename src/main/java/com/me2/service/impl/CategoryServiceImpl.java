@@ -56,6 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
         CategoryVM vm = categoryVMMapper.toDto(categoryRepository.save(entity));
         vm.setChildren(children);
+
         return vm;
     }
 
@@ -116,5 +117,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     private List<Long> toIdList(List<CategorieEntity> categories) {
         return categories.stream().map(CategorieEntity::getId).toList();
+    }
+  
+    private void saveCategories(List<CategoryDTO> categoryDTOList) {
+        categoryDTOList.parallelStream().forEach(c -> {
+            CategorieEntity entity = categoryMapper.toEntity(c);
+            entity.setParentCategoryId(null);
+            entity = categoryRepository.save(entity);
+            saveChildren(c, entity.getId());
+        });
+    }
+
+    private List<CategorieEntity> saveChildren(CategoryDTO c, Long parentId) {
+        List<CategorieEntity> children = categoryMapper.toEntity(c.getChildren());
+        children.forEach(e -> e.setParentCategoryId(parentId));
+        return categoryRepository.saveAll(children);
     }
 }
