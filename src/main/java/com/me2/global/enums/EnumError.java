@@ -8,7 +8,12 @@ public enum EnumError {
 
     UPLOAD_MEDIA_FAILED("media", "UploadFailed", ""),
 
-    CATEGORY_NOT_FOUND("categories", "NotFound", "");
+    CATEGORY_NOT_FOUND("categories", "NotFound", ""),
+
+    PROMOTION_NOT_FOUND("promotions", "NotFound", ""),
+
+    PROMOTION_CODE_EXIST("promotions", "Exist", "Code existed")
+    ;
 
     private String entity;
 

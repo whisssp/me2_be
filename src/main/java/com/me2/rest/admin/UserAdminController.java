@@ -1,17 +1,14 @@
 package com.me2.rest.admin;
 
-import com.me2.rest.response.Paginate;
+import com.me2.global.response.Paginate;
 import com.me2.rest.vm.UserEntityVM;
 import com.me2.service.UserService;
-import com.me2.service.dto.UserDTO;
 import com.me2.service.dto.UserUpdateDTO;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v0/admin")
