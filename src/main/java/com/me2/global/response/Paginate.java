@@ -1,4 +1,4 @@
-package com.me2.rest.response;
+package com.me2.global.response;
 
 import lombok.Data;
 

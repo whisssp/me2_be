@@ -5,7 +5,7 @@ import com.me2.exception.ErrorHandler;
 import com.me2.global.enums.EnumError;
 import com.me2.repository.CategoryRepository;
 import com.me2.rest.mapper.CategoryVMMapper;
-import com.me2.rest.response.Paginate;
+import com.me2.global.response.Paginate;
 import com.me2.rest.vm.CategoryVM;
 import com.me2.service.CategoryService;
 import com.me2.service.dto.CategoryDTO;
@@ -16,11 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -56,7 +54,6 @@ public class CategoryServiceImpl implements CategoryService {
         }
         CategoryVM vm = categoryVMMapper.toDto(categoryRepository.save(entity));
         vm.setChildren(children);
-
         return vm;
     }
 
@@ -117,20 +114,5 @@ public class CategoryServiceImpl implements CategoryService {
 
     private List<Long> toIdList(List<CategorieEntity> categories) {
         return categories.stream().map(CategorieEntity::getId).toList();
-    }
-  
-    private void saveCategories(List<CategoryDTO> categoryDTOList) {
-        categoryDTOList.parallelStream().forEach(c -> {
-            CategorieEntity entity = categoryMapper.toEntity(c);
-            entity.setParentCategoryId(null);
-            entity = categoryRepository.save(entity);
-            saveChildren(c, entity.getId());
-        });
-    }
-
-    private List<CategorieEntity> saveChildren(CategoryDTO c, Long parentId) {
-        List<CategorieEntity> children = categoryMapper.toEntity(c.getChildren());
-        children.forEach(e -> e.setParentCategoryId(parentId));
-        return categoryRepository.saveAll(children);
     }
 }

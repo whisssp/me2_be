@@ -1,10 +1,9 @@
 package com.me2.util;
 
-import com.me2.rest.response.Paginate;
+import com.me2.global.response.Paginate;
 import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PageUtil<T> {
 
