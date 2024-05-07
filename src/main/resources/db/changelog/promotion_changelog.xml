@@ -45,5 +45,29 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="add-columns-promotions" author="whisper">
+        <addColumn tableName="promotions">
+            <column name="code" type="varchar(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="add-columns-2-promotions" author="whisper">
+        <addColumn tableName="promotions">
+            <column name="name" type="varchar(255)"/>
+            <column name="content" type="varchar(255)" />
+            <column name="quantity" type="int4" />
+            <column name="quantity_used" type="int4" />
+            <column name="isActivated" type="boolean" />
+        </addColumn>
+    </changeSet>
+    <changeSet id="alter-table-promotions" author="whisper">
+        <dropColumn tableName="promotions">
+            <column name="is_deleted" />
+        </dropColumn>
+    </changeSet>
+    <changeSet id="alter-table-2-promotions" author="whisper">
+        <renameColumn tableName="promotions" oldColumnName="isActivated" newColumnName="is_activated"/>
+    </changeSet>
 
 </databaseChangeLog>
