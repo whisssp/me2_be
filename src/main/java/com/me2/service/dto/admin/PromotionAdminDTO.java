@@ -19,9 +19,9 @@ public class PromotionAdminDTO {
     @NotNull
     private BigDecimal value;
 
-    private Instant fromDate;
+    private Instant startDate;
 
-    private Instant toDate;
+    private Instant endDate;
 
     private Boolean isActivated;
 
@@ -36,4 +36,6 @@ public class PromotionAdminDTO {
     private Integer quantity;
 
     private Integer quantityUsed;
+
+    private String image;
 }
