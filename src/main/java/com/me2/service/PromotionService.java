@@ -19,4 +19,8 @@ public interface PromotionService {
     PromotionAdminVM getPromotionByIdForAdmin(Long id);
 
     void deleteForAdmin(List<Long> ids);
+
+    List<PromotionAdminVM> approve(List<Long> ids);
+
+    PromotionAdminVM approveByCode(String code);
 }

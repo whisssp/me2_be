@@ -2,6 +2,7 @@ package com.me2.rest.admin.vm;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.me2.global.enums.ActionStatus;
 import com.me2.global.enums.EnumPromotionType;
 import lombok.Data;
 
@@ -42,4 +43,6 @@ public class PromotionAdminVM {
     private Instant lastModifiedDate;
 
     private String image;
+
+    private ActionStatus status;
 }
