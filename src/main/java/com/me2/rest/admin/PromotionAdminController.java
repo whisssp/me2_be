@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v0/admin")
+@RequestMapping("/api/v0")
 @Slf4j
 public class PromotionAdminController {
 
@@ -24,32 +24,32 @@ public class PromotionAdminController {
         this.promotionService = promotionService;
     }
 
-    @PostMapping("/promotion")
+    @PostMapping("/admin/promotion")
     public ResponseEntity<Void> createPromotion(@RequestBody @Valid PromotionAdminDTO promotionDTO) {
       log.debug("REST to create promotion");
       promotionService.createForAdmin(promotionDTO);
       return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/promotion")
+    @PutMapping("/admin/promotion")
     public ResponseEntity<PromotionAdminVM> updatePromotion(@RequestBody @Valid PromotionAdminDTO dto) {
         log.debug("REST to update promotion - id: {}", dto.getId());
         return ResponseEntity.ok(promotionService.updateForAdmin(dto));
     }
 
-    @GetMapping("/promotion/{id}")
+    @GetMapping("/admin/promotion/{id}")
     public ResponseEntity<PromotionAdminVM> getPromotionById(@PathVariable("id") Long id) {
         log.debug("REST to get promotion - id: {}", id);
         return ResponseEntity.ok(promotionService.getPromotionByIdForAdmin(id));
     }
 
-    @GetMapping("/promotion/list")
-    public ResponseEntity<Paginate<PromotionAdminVM>> getPromotionById(@RequestParam PromotionAdminFilterDTO filters, Pageable pageable) {
+    @GetMapping({"/admin/promotion/list", "/public/promotion/list"})
+    public ResponseEntity<Paginate<PromotionAdminVM>> getPromotionById(PromotionAdminFilterDTO filters, Pageable pageable) {
         log.debug("REST to get promotion with filter");
         return ResponseEntity.ok(promotionService.getPromotionWithFilterForAdmin(filters, pageable));
     }
 
-    @DeleteMapping("/promotion")
+    @DeleteMapping("/admin/promotion")
     public ResponseEntity<Void> getPromotionById(@RequestBody List<Long> ids) {
         log.debug("REST to delete promotion");
         promotionService.deleteForAdmin(ids);

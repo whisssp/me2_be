@@ -42,8 +42,8 @@ public class CategoryAdminController {
         return ResponseEntity.ok(categoryService.getOneById(id));
     }
 
-    @GetMapping("/category")
-    public ResponseEntity<Paginate<CategoryVM>> update(Pageable pageable) {
+    @GetMapping("/category/list")
+    public ResponseEntity<Paginate<CategoryVM>> findAllForAdmin(Pageable pageable) {
         log.debug("REST to get all categories");
         return ResponseEntity.ok(categoryService.getAll(pageable));
     }
