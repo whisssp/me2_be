@@ -34,11 +34,11 @@ public class PromotionEntity extends AbstractAuditEntity implements Serializable
     @Column(name = "value", nullable = false, precision = 1)
     private BigDecimal value;
     @Basic
-    @Column(name = "from_date", nullable = true)
-    private Instant fromDate;
+    @Column(name = "start_date", nullable = true)
+    private Instant startDate;
     @Basic
-    @Column(name = "to_date", nullable = true)
-    private Instant toDate;
+    @Column(name = "end_date", nullable = true)
+    private Instant endDate;
     @Basic
     @Column(name = "status", nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
@@ -77,6 +77,10 @@ public class PromotionEntity extends AbstractAuditEntity implements Serializable
     @Column(name = "quantity_used")
     private Integer quantityUsed;
 
+    @Basic
+    @Column(name = "image")
+    private String image;
+
     public Long getId() {
         return id;
     }
@@ -101,20 +105,20 @@ public class PromotionEntity extends AbstractAuditEntity implements Serializable
         this.value = value;
     }
 
-    public Instant getFromDate() {
-        return fromDate;
+    public Instant getStartDate() {
+        return startDate;
     }
 
-    public void setFromDate(Instant fromDate) {
-        this.fromDate = fromDate;
+    public void setStartDate(Instant startDate) {
+        this.startDate = startDate;
     }
 
-    public Instant getToDate() {
-        return toDate;
+    public Instant getEndDate() {
+        return endDate;
     }
 
-    public void setToDate(Instant toDate) {
-        this.toDate = toDate;
+    public void setEndDate(Instant endDate) {
+        this.endDate = endDate;
     }
 
     public ActionStatus getStatus() {
@@ -143,8 +147,8 @@ public class PromotionEntity extends AbstractAuditEntity implements Serializable
         if (id != that.id) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (value != null ? !value.equals(that.value) : that.value != null) return false;
-        if (fromDate != null ? !fromDate.equals(that.fromDate) : that.fromDate != null) return false;
-        if (toDate != null ? !toDate.equals(that.toDate) : that.toDate != null) return false;
+        if (startDate != null ? !startDate.equals(that.startDate) : that.startDate != null) return false;
+        if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
         if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
         if (quantityUsed != null ? !quantityUsed.equals(that.quantityUsed) : that.quantityUsed != null) return false;
@@ -159,8 +163,8 @@ public class PromotionEntity extends AbstractAuditEntity implements Serializable
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (value != null ? value.hashCode() : 0);
-        result = 31 * result + (fromDate != null ? fromDate.hashCode() : 0);
-        result = 31 * result + (toDate != null ? toDate.hashCode() : 0);
+        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (isActivated != null ? isActivated.hashCode() : 0);
         return result;

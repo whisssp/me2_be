@@ -12,6 +12,7 @@ import com.me2.service.PromotionService;
 import com.me2.service.dto.admin.PromotionAdminDTO;
 import com.me2.service.dto.admin.filter.PromotionAdminFilterDTO;
 import com.me2.service.mapper.admin.PromotionAdminMapper;
+import com.me2.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,12 +50,19 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionAdminVM updateForAdmin(PromotionAdminDTO dto) {
-        return null;
+        PromotionEntity entity = promotionRepository.findById(dto.getId())
+                .orElseThrow(() -> new ErrorHandler(EnumError.PROMOTION_NOT_FOUND));
+        promotionAdminMapper.partialUpdate(entity, dto);
+        return promotionAdminVMMapper.toDto(promotionRepository.save(entity));
     }
 
     @Override
     public Paginate<PromotionAdminVM> getPromotionWithFilterForAdmin(PromotionAdminFilterDTO filters, Pageable pageable) {
-        return null;
+        return new PageUtil<PromotionAdminVM>()
+                .toPaginateResponse(promotionRepository
+                        .findAllByFiltersForAdmin(filters, pageable)
+                        .map(promotionAdminVMMapper::toDto)
+                );
     }
 
     @Override
@@ -66,6 +74,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public void deleteForAdmin(List<Long> ids) {
-
+        log.debug("Request to delete promotions by ids: {}", ids);
+        promotionRepository.deleteAllById(ids);
     }
 }

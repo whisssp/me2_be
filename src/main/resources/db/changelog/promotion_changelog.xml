@@ -69,5 +69,12 @@
     <changeSet id="alter-table-2-promotions" author="whisper">
         <renameColumn tableName="promotions" oldColumnName="isActivated" newColumnName="is_activated"/>
     </changeSet>
+    <changeSet id="alter-table-3-promotions" author="whisper">
+        <renameColumn tableName="promotions" oldColumnName="thumbnail" newColumnName="image"/>
+    </changeSet>
+    <changeSet id="alter-table-4-promotions" author="whisper">
+        <renameColumn tableName="promotions" oldColumnName="from_date" newColumnName="start_date"/>
+        <renameColumn tableName="promotions" oldColumnName="to_date" newColumnName="end_date"/>
+    </changeSet>
 
 </databaseChangeLog>
