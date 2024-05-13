@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -76,5 +77,24 @@ public class PromotionServiceImpl implements PromotionService {
     public void deleteForAdmin(List<Long> ids) {
         log.debug("Request to delete promotions by ids: {}", ids);
         promotionRepository.deleteAllById(ids);
+    }
+
+    @Override
+    public List<PromotionAdminVM> approve(List<Long> ids) {
+        return approveForAdmin(ids);
+    }
+
+    @Override
+    public PromotionAdminVM approveByCode(String code) {
+        PromotionEntity entity = promotionRepository.findPromotionEntityByCode(code);
+        entity.setStatus(ActionStatus.APPROVAL);
+        return promotionAdminVMMapper.toDto(promotionRepository.save(entity));
+    }
+
+    private List<PromotionAdminVM> approveForAdmin(List<Long> ids) {
+        List<PromotionEntity> entities = promotionRepository.findAllById(ids);
+        entities.forEach(e -> e.setStatus(ActionStatus.APPROVAL));
+        promotionRepository.saveAll(entities);
+        return promotionAdminVMMapper.toDto(entities);
     }
 }

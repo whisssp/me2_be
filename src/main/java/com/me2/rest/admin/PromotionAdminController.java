@@ -55,4 +55,16 @@ public class PromotionAdminController {
         promotionService.deleteForAdmin(ids);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/admin/promotion/approve")
+    public ResponseEntity<List<PromotionAdminVM>> approve(@RequestBody List<Long> ids) {
+        log.debug("REST to approve promotion");
+        return ResponseEntity.ok(promotionService.approve(ids));
+    }
+
+    @PostMapping("/admin/promotion/approve/{code}")
+    public ResponseEntity<PromotionAdminVM> approveByCode(@PathVariable String code) {
+        log.debug("REST to approve promotion");
+        return ResponseEntity.ok(promotionService.approveByCode(code));
+    }
 }
