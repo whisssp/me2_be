@@ -49,5 +49,12 @@
                 referencedColumnNames="id"
         />
     </changeSet>
+    <changeSet id="add-column-quantity-product_variant" author="whisper">
+        <addColumn tableName="product_variants">
+            <column name="quantity" type="int4">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
