@@ -1,10 +1,14 @@
 package com.me2.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.me2.util.JsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -33,11 +37,11 @@ public class ProductGalleryEntity extends AbstractAuditEntity implements Seriali
         this.id = id;
     }
 
-    public long getProductVariantId() {
+    public Long getProductVariantId() {
         return productVariantId;
     }
 
-    public void setProductVariantId(long productVariantId) {
+    public void setProductVariantId(Long productVariantId) {
         this.productVariantId = productVariantId;
     }
 
