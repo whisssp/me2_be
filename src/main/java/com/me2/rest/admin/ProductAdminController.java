@@ -24,14 +24,14 @@ public class ProductAdminController {
     @PostMapping("/admin/product")
     public ResponseEntity<Void> create(@RequestBody @Valid ProductAdminDTO productAdminDTO) {
       log.debug("REST to create product");
-      productService.create(productAdminDTO);
+      productService.save(productAdminDTO);
       return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/admin/product")
     public ResponseEntity<ProductVM> update(@RequestBody @Valid ProductAdminDTO productAdminDTO) {
         log.debug("REST to create product");
-        return ResponseEntity.ok(productService.update(productAdminDTO));
+        return ResponseEntity.ok(productService.save(productAdminDTO));
     }
 
     @GetMapping("/admin/product/{id}")

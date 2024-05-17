@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface CloudinaryService {
 
-List<Media> upload(List<MultipartFile> file);
+List<Object> upload(List<MultipartFile> file);
 
 
 }

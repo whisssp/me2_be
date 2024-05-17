@@ -2,6 +2,7 @@ package com.me2.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.me2.global.enums.ActionStatus;
 import com.me2.global.enums.EnumProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -46,7 +47,7 @@ public class ProductEntity extends AbstractAuditEntity implements Serializable {
     @Basic
     @Column(name = "status", nullable = false, length = 255)
     @Enumerated(EnumType.STRING)
-    private EnumProductStatus status;
+    private ActionStatus status;
 
     @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
     @JsonBackReference
@@ -117,11 +118,11 @@ public class ProductEntity extends AbstractAuditEntity implements Serializable {
         this.poster = poster;
     }
 
-    public EnumProductStatus getStatus() {
+    public ActionStatus getStatus() {
         return status;
     }
 
-    public void setStatus(EnumProductStatus status) {
+    public void setStatus(ActionStatus status) {
         this.status = status;
     }
 
