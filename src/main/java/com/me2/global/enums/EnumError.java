@@ -12,7 +12,11 @@ public enum EnumError {
 
     PROMOTION_NOT_FOUND("promotions", "NotFound", ""),
 
-    PROMOTION_CODE_EXIST("promotions", "Exist", "Code existed")
+    PROMOTION_CODE_EXIST("promotions", "Exist", "Code existed"),
+
+    PRODUCT_NOT_FOUND("products", "NotFound", ""),
+
+    PRODUCT_EXIST("products", "Exist", "Product existed"),
     ;
 
     private String entity;

@@ -38,6 +38,7 @@ public class SecurityConfiguration {
                         // public
                         requestMatchers(HttpMethod.POST, "/api/v0/media/public/upload/image").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v0/public/promotion/list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v0/public/product/list").permitAll()
                         // customer - authentication
                         .requestMatchers(HttpMethod.POST, "/api/v0/customer/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v0/customer/authenticate").permitAll()
@@ -52,6 +53,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "api/v0/admin/user/**").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "api/v0/admin/user/**").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "api/v0/admin/user/list").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "api/v0/admin/users").hasAuthority(EnumUserRole.ADMIN.name())
 
                         // admin - category
                         .requestMatchers(HttpMethod.POST, "api/v0/admin/category").hasAuthority(EnumUserRole.ADMIN.name())
@@ -69,6 +71,13 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.DELETE, "api/v0/admin/promotion").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "api/v0/admin/promotion/approve").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "api/v0/admin/promotion/approve/**").hasAuthority(EnumUserRole.ADMIN.name())
+                        // admin - product
+                        .requestMatchers(HttpMethod.POST, "api/v0/admin/product").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "api/v0/admin/product").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "api/v0/admin/product/**").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "api/v0/admin/product").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "api/v0/admin/product/list").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "api/v0/admin/product").hasAuthority(EnumUserRole.ADMIN.name())
 
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

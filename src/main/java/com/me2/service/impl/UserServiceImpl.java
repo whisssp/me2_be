@@ -1,6 +1,6 @@
 package com.me2.service.impl;
 
-import com.me2.entity.UserEntity;
+import com.me2.entity.User;
 import com.me2.exception.ErrorHandler;
 import com.me2.global.enums.EnumError;
 import com.me2.global.enums.EnumUserAccountStatus;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntityVM save(UserDTO userDTO, EnumUserRole role) {
         log.debug("Request register new account: {} - role: {}", userDTO, role != null ? role : EnumUserRole.USER);
-        UserEntity newUser = userMapper.toEntity(userDTO);
+        User newUser = userMapper.toEntity(userDTO);
         newUser.setRole(role != null ? role : EnumUserRole.USER);
         newUser.setStatus(EnumUserAccountStatus.ACTIVATED);
         return userVMMapper.toDto(userRepository.save(newUser));
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntityVM update(UserUpdateDTO userDto) {
         log.debug("Request to update user with info: {}", userDto.toString());
-        UserEntity user = userRepository.findById(userDto.getId()).orElseThrow(
+        User user = userRepository.findById(userDto.getId()).orElseThrow(
                 () -> new ErrorHandler(EnumError.USER_NOT_FOUND));
         userUpdateMapper.partialUpdate(user, userDto);
         return userVMMapper.toDto(userRepository.save(user));
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete user by id: {}", id);
-        UserEntity user = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new ErrorHandler(EnumError.USER_NOT_FOUND));
         user.setStatus(EnumUserAccountStatus.DELETED);
         userRepository.save(user);

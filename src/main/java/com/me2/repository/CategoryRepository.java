@@ -1,10 +1,10 @@
 package com.me2.repository;
 
-import com.me2.entity.CategorieEntity;
+import com.me2.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
-public interface CategoryRepository extends JpaRepository<CategorieEntity, Long> {
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    List<CategorieEntity> findAllByParentCategoryId(Long id);
+    List<Category> findAllByParent_Id(Long id);
 }

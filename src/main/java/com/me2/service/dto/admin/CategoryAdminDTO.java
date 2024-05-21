@@ -1,18 +1,17 @@
-package com.me2.service.dto;
+package com.me2.service.dto.admin;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class CategoryDTO {
+public class CategoryAdminDTO {
 
     private Long id;
 
-    private Long parentCategoryId;
+    private CategoryAdminDTO parent;
 
     private String slug;
 
@@ -22,5 +21,5 @@ public class CategoryDTO {
     private String description;
 
     @JsonProperty("children")
-    private List<CategoryDTO> children;
+    private List<CategoryAdminDTO> children;
 }

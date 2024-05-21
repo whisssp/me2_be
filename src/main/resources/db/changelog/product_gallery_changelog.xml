@@ -40,5 +40,11 @@
                 referencedColumnNames="id"
         />
     </changeSet>
+    <changeSet id="change-type-product_galleries" author="whisper">
+        <modifyDataType tableName="product_galleries" columnName="images" newDataType="varchar(255)" />
+    </changeSet>
+    <changeSet id="change-type-product_galleries-1" author="whisper">
+        <modifyDataType tableName="product_galleries" columnName="images" newDataType="longtext" />
+    </changeSet>
 
 </databaseChangeLog>

@@ -8,6 +8,7 @@ import com.me2.exception.ErrorHandler;
 import com.me2.global.enums.EnumError;
 import com.me2.service.CloudinaryService;
 import com.me2.util.CloudUtil;
+import com.me2.util.JsonConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,14 +27,15 @@ public class CloudinaryServiceImpl implements CloudinaryService {
         this.cloudinary = cloudinary;
     }
 
-    public List<Media> upload(List<MultipartFile> files) {
-        List<Media> medias = new ArrayList<>();
+    public List<Object> upload(List<MultipartFile> files) {
+        List<Object> medias = new ArrayList<>();
         files.parallelStream().forEach(f -> {
             try {
-                medias.add((Media) this.cloudinary.uploader()
+                medias.add(cloudinary.uploader()
                         .upload(f.getBytes(),
                                 CloudUtil.toMapOption(CloudOptionPropertyConstants.OPTION_FOLDER,
-                                        ApplicationConstants.PUBLIC)));
+                                        ApplicationConstants.PUBLIC))
+                );
             } catch (IOException e) {
                 throw new ErrorHandler(EnumError.UPLOAD_MEDIA_FAILED);
             }

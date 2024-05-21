@@ -1,6 +1,6 @@
 package com.me2.service.impl;
 
-import com.me2.entity.PromotionEntity;
+import com.me2.entity.Promotion;
 import com.me2.exception.ErrorHandler;
 import com.me2.global.enums.ActionStatus;
 import com.me2.global.enums.EnumError;
@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,7 +42,7 @@ public class PromotionServiceImpl implements PromotionService {
         log.debug("Request to create promotion - promotion_code: {}", dto.getCode());
         if (promotionRepository.findPromotionEntityByCode(dto.getCode()) != null)
             throw new ErrorHandler(EnumError.PROMOTION_CODE_EXIST);
-        PromotionEntity entity = promotionAdminMapper.toEntity(dto);
+        Promotion entity = promotionAdminMapper.toEntity(dto);
         entity.setStatus(ActionStatus.WAITING_FOR_APPROVAL);
         entity.setIsActivated(false);
         promotionRepository.save(entity);
@@ -51,7 +50,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionAdminVM updateForAdmin(PromotionAdminDTO dto) {
-        PromotionEntity entity = promotionRepository.findById(dto.getId())
+        Promotion entity = promotionRepository.findById(dto.getId())
                 .orElseThrow(() -> new ErrorHandler(EnumError.PROMOTION_NOT_FOUND));
         promotionAdminMapper.partialUpdate(entity, dto);
         return promotionAdminVMMapper.toDto(promotionRepository.save(entity));
@@ -86,13 +85,18 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public PromotionAdminVM approveByCode(String code) {
-        PromotionEntity entity = promotionRepository.findPromotionEntityByCode(code);
+        Promotion entity = promotionRepository.findPromotionEntityByCode(code);
         entity.setStatus(ActionStatus.APPROVAL);
         return promotionAdminVMMapper.toDto(promotionRepository.save(entity));
     }
 
+    @Override
+    public Promotion findById(Long id) {
+        return promotionRepository.findById(id).orElseThrow(() -> new ErrorHandler(EnumError.PROMOTION_NOT_FOUND));
+    }
+
     private List<PromotionAdminVM> approveForAdmin(List<Long> ids) {
-        List<PromotionEntity> entities = promotionRepository.findAllById(ids);
+        List<Promotion> entities = promotionRepository.findAllById(ids);
         entities.forEach(e -> e.setStatus(ActionStatus.APPROVAL));
         promotionRepository.saveAll(entities);
         return promotionAdminVMMapper.toDto(entities);

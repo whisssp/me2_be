@@ -42,6 +42,4 @@ public class Media {
     private Boolean placeholder;
 
     private Integer height;
-
-
 }
