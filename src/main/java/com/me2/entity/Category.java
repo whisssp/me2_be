@@ -2,6 +2,7 @@ package com.me2.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,15 +15,16 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategorieEntity extends AbstractAuditEntity implements Serializable {
+public class Category extends AbstractAuditEntity<Long> implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Basic
-    @Column(name = "parent_category_id", nullable = true)
-    private Long parentCategoryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_category_id")
+    @JsonIgnoreProperties(value = {"parent", "children", "products"}, allowSetters = true)
+    private Category parent;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "parent_category_id", insertable=false, updatable=false)
@@ -30,25 +32,23 @@ public class CategorieEntity extends AbstractAuditEntity implements Serializable
 //    @JsonIgnore
 //    private CategorieEntity parent;
 
-    @Basic
+    
     @Column(name = "slug", nullable = true, length = 255)
     private String slug;
-    @Basic
+    
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-    @Basic
+    
     @Column(name = "description", nullable = true, length = 255)
     private String description;
 
-    @OneToMany(mappedBy = "parentCategoryId", fetch = FetchType.LAZY)
-    @JsonBackReference
-    @JsonIgnore
-    private List<CategorieEntity> children;
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"products", "parent", "children"}, allowSetters = true)
+    private List<Category> children;
 
-    @OneToMany(mappedBy = "categoryId", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<ProductEntity> products;
+    private List<Product> products;
 
     public Long getId() {
         return id;
@@ -58,12 +58,12 @@ public class CategorieEntity extends AbstractAuditEntity implements Serializable
         this.id = id;
     }
 
-    public Long getParentCategoryId() {
-        return parentCategoryId;
+    public Category getParent() {
+        return parent;
     }
 
-    public void setParentCategoryId(Long parentCategoryId) {
-        this.parentCategoryId = parentCategoryId;
+    public void setParentCategoryId(Category parent) {
+        this.parent = parent;
     }
 
     public String getSlug() {
@@ -95,10 +95,10 @@ public class CategorieEntity extends AbstractAuditEntity implements Serializable
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CategorieEntity that = (CategorieEntity) o;
+        Category that = (Category) o;
 
         if (id != that.id) return false;
-        if (parentCategoryId != null ? !parentCategoryId.equals(that.parentCategoryId) : that.parentCategoryId != null)
+        if (parent != null ? !parent.equals(that.parent) : that.parent != null)
             return false;
         if (slug != null ? !slug.equals(that.slug) : that.slug != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;

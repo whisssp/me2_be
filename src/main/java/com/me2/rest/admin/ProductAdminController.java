@@ -1,7 +1,7 @@
 package com.me2.rest.admin;
 
 import com.me2.global.response.Paginate;
-import com.me2.rest.vm.ProductVM;
+import com.me2.rest.admin.vm.ProductAdminVM;
 import com.me2.service.ProductService;
 import com.me2.service.dto.admin.ProductAdminDTO;
 import jakarta.validation.Valid;
@@ -29,19 +29,19 @@ public class ProductAdminController {
     }
 
     @PutMapping("/admin/product")
-    public ResponseEntity<ProductVM> update(@RequestBody @Valid ProductAdminDTO productAdminDTO) {
-        log.debug("REST to create product");
+    public ResponseEntity<?> update(@RequestBody @Valid ProductAdminDTO productAdminDTO) {
+        log.debug("REST to update product");
         return ResponseEntity.ok(productService.save(productAdminDTO));
     }
 
     @GetMapping("/admin/product/{id}")
-    public ResponseEntity<ProductVM> getOneProduct(@PathVariable Long id) {
+    public ResponseEntity<ProductAdminVM> getOneProduct(@PathVariable Long id) {
         log.debug("REST to get product by id: {}", id);
         return ResponseEntity.ok(productService.getProductByIdForAdmin(id));
     }
 
     @GetMapping({"/admin/product/list", "/public/product/list"})
-    public ResponseEntity<Paginate<ProductVM>> getListProduct(Pageable pageable) {
+    public ResponseEntity<Paginate<ProductAdminVM>> getListProduct(Pageable pageable) {
         log.debug("REST to get all products");
         return ResponseEntity.ok(productService.getAllProduct(pageable));
     }

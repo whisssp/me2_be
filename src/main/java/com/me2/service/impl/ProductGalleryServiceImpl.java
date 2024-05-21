@@ -1,14 +1,13 @@
 package com.me2.service.impl;
 
 
-import com.me2.entity.ProductGalleryEntity;
+import com.me2.entity.ProductGallery;
 import com.me2.repository.ProductGalleryRepository;
 import com.me2.service.ProductGalleryService;
 import com.me2.service.dto.admin.ProductGalleryAdminDTO;
 import com.me2.service.mapper.admin.ProductGalleryAdminMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class ProductGalleryServiceImpl implements ProductGalleryService {
     @Override
     public void save(List<ProductGalleryAdminDTO> galleryAdminDTOs) {
         log.info("galleries dto: {}", galleryAdminDTOs.toString());
-        List<ProductGalleryEntity> entities = galleryAdminDTOs.stream()
+        List<ProductGallery> entities = galleryAdminDTOs.stream()
                 .map(galleryMapper::toEntity)
                 .toList();
         log.info("galleries: {}", galleryAdminDTOs.toString());

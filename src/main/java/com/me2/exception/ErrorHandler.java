@@ -2,9 +2,11 @@ package com.me2.exception;
 
 import com.me2.global.enums.EnumError;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
+@EqualsAndHashCode(callSuper = false)
 @Data
 public class ErrorHandler extends RuntimeException implements Serializable {
 

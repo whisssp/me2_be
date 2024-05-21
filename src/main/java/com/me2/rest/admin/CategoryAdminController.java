@@ -1,9 +1,9 @@
 package com.me2.rest.admin;
 
 import com.me2.global.response.Paginate;
-import com.me2.rest.vm.CategoryVM;
+import com.me2.rest.admin.vm.CategoryAdminVM;
 import com.me2.service.CategoryService;
-import com.me2.service.dto.CategoryDTO;
+import com.me2.service.dto.admin.CategoryAdminDTO;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -24,26 +24,26 @@ public class CategoryAdminController {
     }
 
     @PostMapping("/category")
-    public ResponseEntity<Void> createCategory(@RequestBody @Valid List<CategoryDTO> listCategoryDTO) {
+    public ResponseEntity<Void> createCategory(@RequestBody @Valid List<CategoryAdminDTO> listCategoryAdminDTO) {
         log.debug("REST to create categories");
-        categoryService.create(listCategoryDTO);
+        categoryService.create(listCategoryAdminDTO);
         return ResponseEntity.noContent().build();
     }
   
     @PutMapping("/category")
-    public ResponseEntity<CategoryVM> update(@RequestBody @Valid CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryAdminVM> update(@RequestBody @Valid CategoryAdminDTO categoryAdminDTO) {
         log.debug("REST to update categories");
-        return ResponseEntity.ok(categoryService.update(categoryDTO));
+        return ResponseEntity.ok(categoryService.update(categoryAdminDTO));
     }
 
     @GetMapping("/category/{id}")
-    public ResponseEntity<CategoryVM> getOne(@PathVariable("id") Long id) {
+    public ResponseEntity<CategoryAdminVM> getOne(@PathVariable("id") Long id) {
         log.debug("REST to get category by id: {}", id);
         return ResponseEntity.ok(categoryService.getOneById(id));
     }
 
     @GetMapping("/category/list")
-    public ResponseEntity<Paginate<CategoryVM>> findAllForAdmin(Pageable pageable) {
+    public ResponseEntity<Paginate<CategoryAdminVM>> findAllForAdmin(Pageable pageable) {
         log.debug("REST to get all categories");
         return ResponseEntity.ok(categoryService.getAll(pageable));
     }

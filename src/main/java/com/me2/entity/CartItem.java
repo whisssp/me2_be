@@ -1,6 +1,6 @@
 package com.me2.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,25 +14,27 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Entity
 @Table(name = "cart_items", schema = "public", catalog = "me2_db")
-public class CartItemEntity extends AbstractAuditEntity implements Serializable {
+public class CartItem extends AbstractAuditEntity<Long> implements Serializable {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
+    
     @Column(name = "cart_id", nullable = false)
     private Long cartId;
-    @Basic
-    @Column(name = "product_variant_id", nullable = false)
-    private Long productVariantId;
-    @Basic
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"product", "cartItems", "orderDetails", "productGallery"}, allowSetters = true)
+    private ProductVariant productVariant;
+    
     @Column(name = "quantity", nullable = false)
     private int quantity;
-    @Basic
+    
     @Column(name = "price", nullable = false, precision = 2)
     private BigDecimal price;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -48,12 +50,12 @@ public class CartItemEntity extends AbstractAuditEntity implements Serializable 
         this.cartId = cartId;
     }
 
-    public long getProductVariantId() {
-        return productVariantId;
+    public ProductVariant getProductVariant() {
+        return productVariant;
     }
 
-    public void setProductVariantId(Long productVariantId) {
-        this.productVariantId = productVariantId;
+    public void setProductVariant(ProductVariant productVariant) {
+        this.productVariant = productVariant;
     }
 
     public int getQuantity() {
@@ -76,11 +78,11 @@ public class CartItemEntity extends AbstractAuditEntity implements Serializable 
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CartItemEntity that = (CartItemEntity) o;
+        CartItem that = (CartItem) o;
 
         if (id != that.id) return false;
         if (cartId != that.cartId) return false;
-        if (productVariantId != that.productVariantId) return false;
+        if (productVariant != that.productVariant) return false;
         if (quantity != that.quantity) return false;
         if (price != null ? !price.equals(that.price) : that.price != null) return false;
 
@@ -91,7 +93,7 @@ public class CartItemEntity extends AbstractAuditEntity implements Serializable 
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (int) (cartId ^ (cartId >>> 32));
-        result = 31 * result + (int) (productVariantId ^ (productVariantId >>> 32));
+        result = 31 * result + (productVariant != null ? productVariant.hashCode() : 0);
         result = 31 * result + quantity;
         result = 31 * result + (price != null ? price.hashCode() : 0);
         return result;

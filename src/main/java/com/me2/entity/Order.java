@@ -2,6 +2,7 @@ package com.me2.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.me2.global.enums.EnumOrderStatus;
 import com.me2.global.enums.EnumPaymentMethod;
 import com.me2.global.enums.EnumPaymentStatus;
@@ -10,7 +11,6 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -19,37 +19,39 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "orders", schema = "public", catalog = "me2_db")
-public class OrderEntity extends AbstractAuditEntity implements Serializable {
+public class Order extends AbstractAuditEntity<Long> implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
-    @Column(name = "recipient_id", nullable = false)
-    private Long recipientId;
-    @Basic
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
-    @Basic
-    @Column(name = "promotion_id", nullable = true)
-    private Long promotionId;
-    @Basic
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"address", "orders"}, allowSetters = true)
+    private Recipient recipient;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"addresses", "carts", "orders"}, allowSetters = true)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"orders", "products"}, allowSetters = true)
+    private Promotion promotion;
+    
     @Column(name = "payment_method", nullable = false, length = 100)
     @Enumerated(EnumType.STRING)
     private EnumPaymentMethod paymentMethod;
-    @Basic
+    
     @Column(name = "payment_status", nullable = false, length = 100)
     @Enumerated(EnumType.STRING)
     private EnumPaymentStatus paymentStatus;
-    @Basic
+    
     @Column(name = "status", nullable = false, length = 100)
     @Enumerated(EnumType.STRING)
     private EnumOrderStatus status;
 
-    @OneToMany(mappedBy = "orderId", fetch = FetchType.LAZY)
-    @JsonBackReference
-    @JsonIgnore
-    private List<OrderDetailEntity> orderDetailList;
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"productVariant", "order"}, allowSetters = true)
+    private List<OrderDetail> orderDetails;
 
     public Long getId() {
         return id;
@@ -59,28 +61,28 @@ public class OrderEntity extends AbstractAuditEntity implements Serializable {
         this.id = id;
     }
 
-    public Long getRecipientId() {
-        return recipientId;
+    public Recipient getRecipient() {
+        return recipient;
     }
 
-    public void setRecipientId(Long recipientId) {
-        this.recipientId = recipientId;
+    public void setRecipient(Recipient recipient) {
+        this.recipient = recipient;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Long getPromotionId() {
-        return promotionId;
+    public Promotion getPromotion() {
+        return promotion;
     }
 
-    public void setPromotionId(Long promotionId) {
-        this.promotionId = promotionId;
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
     }
 
     public EnumPaymentMethod getPaymentMethod() {
@@ -112,12 +114,12 @@ public class OrderEntity extends AbstractAuditEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OrderEntity that = (OrderEntity) o;
+        Order that = (Order) o;
 
         if (id != that.id) return false;
-        if (recipientId != that.recipientId) return false;
-        if (userId != that.userId) return false;
-        if (promotionId != null ? !promotionId.equals(that.promotionId) : that.promotionId != null) return false;
+        if (recipient != that.recipient) return false;
+        if (user != that.user) return false;
+        if (promotion != null ? !promotion.equals(that.promotion) : that.promotion != null) return false;
         if (paymentMethod != null ? !paymentMethod.equals(that.paymentMethod) : that.paymentMethod != null)
             return false;
         if (paymentStatus != null ? !paymentStatus.equals(that.paymentStatus) : that.paymentStatus != null)
@@ -130,9 +132,9 @@ public class OrderEntity extends AbstractAuditEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (int) (recipientId ^ (recipientId >>> 32));
-        result = 31 * result + (int) (userId ^ (userId >>> 32));
-        result = 31 * result + (promotionId != null ? promotionId.hashCode() : 0);
+        result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (promotion != null ? promotion.hashCode() : 0);
         result = 31 * result + (paymentMethod != null ? paymentMethod.hashCode() : 0);
         result = 31 * result + (paymentStatus != null ? paymentStatus.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);

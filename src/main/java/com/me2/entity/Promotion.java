@@ -2,8 +2,8 @@ package com.me2.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.me2.global.enums.ActionStatus;
-import com.me2.global.enums.EnumPromotionStatus;
 import com.me2.global.enums.EnumPromotionType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,64 +20,62 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PromotionEntity extends AbstractAuditEntity implements Serializable {
+public class Promotion extends AbstractAuditEntity implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
+    
     @Column(name = "type", nullable = false, length = 255)
     @Enumerated(EnumType.STRING)
     private EnumPromotionType type;
-    @Basic
+    
     @Column(name = "value", nullable = false, precision = 1)
     private BigDecimal value;
-    @Basic
+    
     @Column(name = "start_date", nullable = true)
     private Instant startDate;
-    @Basic
+    
     @Column(name = "end_date", nullable = true)
     private Instant endDate;
-    @Basic
+    
     @Column(name = "status", nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private ActionStatus status;
-    @Basic
+    
     @Column(name = "is_activated", nullable = true)
     private Boolean isActivated;
 
-    @OneToMany(mappedBy = "promotionId", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @OneToMany(mappedBy = "promotion", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<OrderEntity> orderList;
+    private List<Order> orders;
 
-    @OneToMany(mappedBy = "promotionId", fetch = FetchType.LAZY)
-    @JsonBackReference
-    @JsonIgnore
-    private List<ProductEntity> productList;
+    @OneToMany(mappedBy = "promotion", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"product", "category", "productVariants"}, allowSetters = true)
+    private List<Product> products;
 
-    @Basic
+    
     @Column(name = "code", nullable = false)
     private String code;
 
-    @Basic
+    
     @Column(name = "name")
     private String name;
 
-    @Basic
+    
     @Column(name = "content")
     private String content;
 
-    @Basic
+    
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Basic
+    
     @Column(name = "quantity_used")
     private Integer quantityUsed;
 
-    @Basic
+    
     @Column(name = "image")
     private String image;
 
@@ -129,7 +127,7 @@ public class PromotionEntity extends AbstractAuditEntity implements Serializable
         this.status = status;
     }
 
-    public Boolean getIsAtivated() {
+    public Boolean getIsActivated() {
         return isActivated;
     }
 
@@ -142,7 +140,7 @@ public class PromotionEntity extends AbstractAuditEntity implements Serializable
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PromotionEntity that = (PromotionEntity) o;
+        Promotion that = (Promotion) o;
 
         if (id != that.id) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;

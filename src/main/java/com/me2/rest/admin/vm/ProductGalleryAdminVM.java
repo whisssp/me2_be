@@ -13,7 +13,7 @@ public class ProductGalleryAdminVM {
 
     private Long id;
 
-    private Long productId;
+    private Long productVariantId;
 
     @JsonIgnore
     private String images;
@@ -28,9 +28,9 @@ public class ProductGalleryAdminVM {
         imageList = JsonConverter.toObjectArray(images);
     }
 
-    public void setImages(List<Object> images) {
-        if (images == null)
-            imageList = new ArrayList<>();
-        this.images = JsonConverter.toJson(images);
-    }
+//    public void setImageList(List<Object> imageList) {
+//        if (imageList == null || imageList.isEmpty())
+//            this.images = null;
+//        this.images = JsonConverter.toJson(imageList);
+//    }
 }

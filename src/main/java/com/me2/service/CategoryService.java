@@ -1,21 +1,24 @@
 package com.me2.service;
 
+import com.me2.entity.Category;
 import com.me2.global.response.Paginate;
-import com.me2.rest.vm.CategoryVM;
-import com.me2.service.dto.CategoryDTO;
+import com.me2.rest.admin.vm.CategoryAdminVM;
+import com.me2.service.dto.admin.CategoryAdminDTO;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    void create(List<CategoryDTO> dtoList);
+    void create(List<CategoryAdminDTO> dtoList);
 
-    CategoryVM update(CategoryDTO dto);
+    CategoryAdminVM update(CategoryAdminDTO dto);
 
     void delete(List<Long> ids);
 
-    CategoryVM getOneById(Long id);
+    CategoryAdminVM getOneById(Long id);
 
-    Paginate<CategoryVM> getAll(Pageable pageable);
+    Paginate<CategoryAdminVM> getAll(Pageable pageable);
+
+    Category findById(Long id);
 }

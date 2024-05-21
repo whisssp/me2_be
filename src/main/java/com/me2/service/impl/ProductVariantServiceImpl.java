@@ -1,6 +1,7 @@
 package com.me2.service.impl;
 
-import com.me2.entity.ProductVariantEntity;
+import com.me2.entity.ProductGallery;
+import com.me2.entity.ProductVariant;
 import com.me2.repository.ProductVariantRepository;
 import com.me2.rest.admin.vm.ProductVariantAdminVM;
 import com.me2.service.ProductGalleryService;
@@ -9,13 +10,9 @@ import com.me2.service.dto.admin.ProductGalleryAdminDTO;
 import com.me2.service.dto.admin.ProductVariantAdminDTO;
 import com.me2.service.mapper.admin.ProductVariantAdminMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.map.HashedMap;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -36,10 +33,11 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     @Override
     public void save(Set<ProductVariantAdminDTO> variantAdminDTOs) {
         variantAdminDTOs.forEach(e -> {
-            ProductVariantEntity entity = variantAdminMapper.toEntity(e);
+            ProductVariant entity = variantAdminMapper.toEntity(e);
             log.info(">>>VARIANT={}", entity);
             entity = variantRepository.saveAndFlush(entity);
-            this.saveGallery(entity.getId(), e.getGallery());
+            log.info(">>>VARIANT-saved={}", entity);
+            this.saveGallery(entity.getId(), e.getProductGalleries());
         });
     }
 
@@ -48,9 +46,9 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         return null;
     }
 
-    private void saveGallery(Long variantId, ProductGalleryAdminDTO galleryAdminDTOS) {
+    private void saveGallery(Long variantId, List<ProductGalleryAdminDTO> galleryAdminDTOS) {
         if (variantId == null) return;
-        galleryAdminDTOS.setProductVariantId(variantId);
-        galleryService.save(List.of(galleryAdminDTOS));
+        galleryAdminDTOS.forEach(g -> g.setProductVariantId(variantId));
+        galleryService.save(galleryAdminDTOS);
     }
 }

@@ -53,6 +53,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PUT, "api/v0/admin/user/**").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "api/v0/admin/user/**").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "api/v0/admin/user/list").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.GET, "api/v0/admin/users").hasAuthority(EnumUserRole.ADMIN.name())
 
                         // admin - category
                         .requestMatchers(HttpMethod.POST, "api/v0/admin/category").hasAuthority(EnumUserRole.ADMIN.name())

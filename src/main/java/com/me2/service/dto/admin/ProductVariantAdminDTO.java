@@ -1,5 +1,8 @@
 package com.me2.service.dto.admin;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.me2.entity.Product;
+import com.me2.entity.ProductGallery;
 import lombok.Data;
 
 import java.util.List;
@@ -19,8 +22,9 @@ public class ProductVariantAdminDTO {
 
     private String name;
 
-    private Long productId;
+    private Product product;
 
-    private ProductGalleryAdminDTO gallery;
+    @JsonProperty("galleries")
+    private List<ProductGalleryAdminDTO> productGalleries;
 
 }
