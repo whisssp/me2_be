@@ -2,6 +2,7 @@ package com.me2.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.me2.global.enums.EnumUserAccountStatus;
 import com.me2.global.enums.EnumUserRole;
 import jakarta.persistence.*;
@@ -20,69 +21,68 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "users", schema = "public", catalog = "me2_db")
-public class UserEntity extends AbstractAuditEntity implements Serializable {
+public class User extends AbstractAuditEntity<Long> implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
+
     @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
-    @Basic
+
     @Column(name = "middle_name", nullable = true, length = 50)
     private String middleName;
-    @Basic
+
     @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
-    @Basic
+
     @Column(name = "email", nullable = false, length = 100)
     private String email;
-    @Basic
+
     @Column(name = "password", nullable = false, length = 100)
     private String password;
-    @Basic
+
     @Column(name = "phone", nullable = false, length = 10)
     private String phone;
-    @Basic
+
     @Column(name = "avatar", nullable = true, length = 255)
     private String avatar;
-    @Basic
+
     @Column(name = "last_login", nullable = true)
     private Instant lastLogin;
-    @Basic
+
     @Column(name = "email_validated", nullable = true)
     private Boolean emailValidated;
-    @Basic
+
     @Column(name = "role", nullable = true, length = 255)
     @Enumerated(EnumType.STRING)
     private EnumUserRole role;
-    @Basic
+
     @Column(name = "status", nullable = true, length = 255)
     @Enumerated(EnumType.STRING)
     private EnumUserAccountStatus status;
 
-    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
-    @JsonBackReference
-    @JsonIgnore
-    private List<AddressEntity> addressList;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"user", "recipients"}, allowSetters = true)
+    private List<Address> addresses;
 
-    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    @JsonIgnoreProperties(value = {"user", "cartItems"}, allowSetters = true)
     @JsonIgnore
-    private Set<CartEntity> cartList;
+    private Set<Cart> carts;
 
-    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<OrderEntity> orderList;
+//    @JsonIgnoreProperties(value = {"user", "recipient", "promotion", "orderDetails"}, allowSetters = true)
+    private Set<Order> orders;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserEntity that = (UserEntity) o;
+        User that = (User) o;
 
         if (id != that.id) return false;
         if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;

@@ -1,7 +1,6 @@
 package com.me2.service.dto.admin;
 
-import com.me2.entity.ProductGalleryEntity;
-import com.me2.entity.ProductVariantEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.me2.global.enums.ActionStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -25,11 +24,14 @@ public class ProductAdminDTO {
 
     private String poster;
 
+    private String description;
+
     private ActionStatus status;
 
     @NotNull
     private BigDecimal price;
 
-    private Set<ProductVariantAdminDTO> variants;
+    @JsonProperty("variants")
+    private Set<ProductVariantAdminDTO> productVariants;
 
 }

@@ -1,5 +1,6 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,17 +14,19 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "carts", schema = "public", catalog = "me2_db")
-public class CartEntity extends AbstractAuditEntity implements Serializable {
+public class Cart extends AbstractAuditEntity<Long> implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
-    @Column(name = "user_id", nullable = true)
-    private Long userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"addresses", "carts", "orders"}, allowSetters = true)
+    private User user;
 
     @OneToMany(mappedBy = "cartId", fetch = FetchType.LAZY)
-    private List<CartItemEntity> cartItemList;
+    @JsonIgnoreProperties(value = {"productVariant"}, allowSetters = true)
+    private List<CartItem> cartItems;
 
     public Long getId() {
         return id;
@@ -33,12 +36,12 @@ public class CartEntity extends AbstractAuditEntity implements Serializable {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
 
@@ -47,10 +50,10 @@ public class CartEntity extends AbstractAuditEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CartEntity that = (CartEntity) o;
+        Cart that = (Cart) o;
 
         if (id != that.id) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
+        if (user != null ? !user.equals(that.user) : that.user != null) return false;
 
         return true;
     }
@@ -58,7 +61,7 @@ public class CartEntity extends AbstractAuditEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
     }
 }

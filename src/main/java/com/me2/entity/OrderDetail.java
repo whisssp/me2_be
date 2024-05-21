@@ -1,8 +1,10 @@
 package com.me2.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
@@ -12,21 +14,24 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderDetailEntity extends AbstractAuditEntity {
+public class OrderDetail extends AbstractAuditEntity<Long> implements Serializable {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
-    @Column(name = "order_id", nullable = false)
-    private Long orderId;
-    @Basic
-    @Column(name = "product_variant_id", nullable = false)
-    private Long productVariantId;
-    @Basic
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"recipient", "user", "orderDetails"}, allowSetters = true)
+    private Order order;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"product", "cartItems", "orderDetails", "productGallery"}, allowSetters = true)
+    private ProductVariant productVariant;
+    
     @Column(name = "quantity", nullable = true)
     private Integer quantity;
-    @Basic
+    
     @Column(name = "price", nullable = false, precision = 2)
     private BigDecimal price;
 
@@ -40,20 +45,20 @@ public class OrderDetailEntity extends AbstractAuditEntity {
         this.id = id;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
-    public Long getProductVariantId() {
-        return productVariantId;
+    public ProductVariant getProductVariant() {
+        return productVariant;
     }
 
-    public void setProductVariantId(Long productVariantId) {
-        this.productVariantId = productVariantId;
+    public void setProductVariant(ProductVariant productVariant) {
+        this.productVariant = productVariant;
     }
 
     public Integer getQuantity() {
@@ -77,11 +82,11 @@ public class OrderDetailEntity extends AbstractAuditEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OrderDetailEntity that = (OrderDetailEntity) o;
+        OrderDetail that = (OrderDetail) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (orderId != null ? !orderId.equals(that.orderId) : that.orderId != null) return false;
-        if (productVariantId != null ? !productVariantId.equals(that.productVariantId) : that.productVariantId != null)
+        if (order != null ? !order.equals(that.order) : that.order != null) return false;
+        if (productVariant != null ? !productVariant.equals(that.productVariant) : that.productVariant != null)
             return false;
         if (quantity != null ? !quantity.equals(that.quantity) : that.quantity != null) return false;
         if (price != null ? !price.equals(that.price) : that.price != null) return false;
@@ -92,8 +97,8 @@ public class OrderDetailEntity extends AbstractAuditEntity {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (orderId != null ? orderId.hashCode() : 0);
-        result = 31 * result + (productVariantId != null ? productVariantId.hashCode() : 0);
+        result = 31 * result + (order != null ? order.hashCode() : 0);
+        result = 31 * result + (productVariant != null ? productVariant.hashCode() : 0);
         result = 31 * result + (quantity != null ? quantity.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         return result;

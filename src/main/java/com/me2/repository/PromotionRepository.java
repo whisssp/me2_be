@@ -1,23 +1,20 @@
 package com.me2.repository;
 
-import com.me2.entity.PromotionEntity;
+import com.me2.entity.Promotion;
 import com.me2.service.dto.admin.filter.PromotionAdminFilterDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface PromotionRepository extends JpaRepository<PromotionEntity, Long> {
+public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
-    PromotionEntity findPromotionEntityByCode(String code);
+    Promotion findPromotionEntityByCode(String code);
 
-    @Query("select p from PromotionEntity p where p.status <> 'DELETED' "
+    @Query("select p from Promotion p where p.status <> 'DELETED' "
             + "and (cast(:#{#filters.id} as text) is null or (cast(p.id as text) like concat('%', :#{#filters.id?.toString()}, '%'))) "
             + "and ((:#{#filters.type} is null) or (p.type = :#{#filters.type})) "
             + "and ((:#{#filters.isActivated} is null) or (p.isActivated = :#{#filters.isActivated})) "
@@ -37,5 +34,5 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
             + "and ((cast(cast(:#{#filters.fromLastModifiedDate} as text) as timestamp) is null) or (cast(cast(p.lastModifiedDate as text) as timestamp)>= cast(cast(:#{#filters.fromLastModifiedDate} as text) as timestamp))) "
             + "and ((cast(cast(:#{#filters.toLastModifiedDate} as text) as timestamp) is null) or (cast(cast(p.lastModifiedDate as text) as timestamp)>= cast(cast(:#{#filters.toLastModifiedDate} as text) as timestamp))) "
     )
-    Page<PromotionEntity> findAllByFiltersForAdmin(@Param("filters") PromotionAdminFilterDTO filters, Pageable pageable);
+    Page<Promotion> findAllByFiltersForAdmin(@Param("filters") PromotionAdminFilterDTO filters, Pageable pageable);
 }

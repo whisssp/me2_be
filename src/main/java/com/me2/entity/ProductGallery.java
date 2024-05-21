@@ -1,14 +1,9 @@
 package com.me2.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.me2.util.JsonConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter
@@ -17,13 +12,14 @@ import java.util.Map;
 @NoArgsConstructor
 @Entity
 @Table(name = "product_galleries", schema = "public", catalog = "me2_db")
-public class ProductGalleryEntity extends AbstractAuditEntity implements Serializable {
+public class ProductGallery extends AbstractAuditEntity<Long> implements Serializable {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
-    @Column(name = "product_variant_id", nullable = false)
+
+    @JoinColumn(name = "product_variant_id", nullable = false)
     private Long productVariantId;
 
     @Column(name = "images", nullable = false, length = 255)
@@ -59,7 +55,7 @@ public class ProductGalleryEntity extends AbstractAuditEntity implements Seriali
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProductGalleryEntity that = (ProductGalleryEntity) o;
+        ProductGallery that = (ProductGallery) o;
 
         if (id != that.id) return false;
         if (productVariantId != that.productVariantId) return false;
@@ -68,11 +64,11 @@ public class ProductGalleryEntity extends AbstractAuditEntity implements Seriali
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (int) (productVariantId ^ (productVariantId >>> 32));
-        result = 31 * result + (images != null ? images.hashCode() : 0);
-        return result;
-    }
+//    @Override
+//    public int hashCode() {
+//        int result = (int) (id ^ (id >>> 32));
+//        result = 31 * result + (int) (productVariantId ^ (productVariantId >>> 32));
+//        result = 31 * result + (images != null ? images.hashCode() : 0);
+//        return result;
+//    }
 }

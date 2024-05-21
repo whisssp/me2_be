@@ -1,20 +1,21 @@
 package com.me2.service.impl;
 
-import com.me2.entity.CategorieEntity;
+import com.me2.entity.Category;
 import com.me2.exception.ErrorHandler;
 import com.me2.global.enums.EnumError;
 import com.me2.repository.CategoryRepository;
-import com.me2.rest.mapper.CategoryVMMapper;
+import com.me2.rest.admin.mapper.CategoryAdminVMMapper;
 import com.me2.global.response.Paginate;
-import com.me2.rest.vm.CategoryVM;
+import com.me2.rest.admin.vm.CategoryAdminVM;
 import com.me2.service.CategoryService;
-import com.me2.service.dto.CategoryDTO;
-import com.me2.service.mapper.CategoryMapper;
+import com.me2.service.dto.admin.CategoryAdminDTO;
+import com.me2.service.mapper.admin.CategoryAdminMapper;
 import com.me2.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,37 +23,38 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@Transactional
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    private final CategoryMapper categoryMapper;
+    private final CategoryAdminMapper categoryAdminMapper;
 
-    private final CategoryVMMapper categoryVMMapper;
+    private final CategoryAdminVMMapper categoryAdminVMMapper;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper, CategoryVMMapper categoryVMMapper) {
+    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryAdminMapper categoryAdminMapper, CategoryAdminVMMapper categoryAdminVMMapper) {
         this.categoryRepository = categoryRepository;
-        this.categoryMapper = categoryMapper;
-        this.categoryVMMapper = categoryVMMapper;
+        this.categoryAdminMapper = categoryAdminMapper;
+        this.categoryAdminVMMapper = categoryAdminVMMapper;
     }
 
     @Override
-    public void create(List<CategoryDTO> dtoList) {
+    public void create(List<CategoryAdminDTO> dtoList) {
         log.debug("Request to create categories");
         saveCategories(dtoList);
     }
 
     @Override
-    public CategoryVM update(CategoryDTO dto) {
+    public CategoryAdminVM update(CategoryAdminDTO dto) {
         log.debug("Request to update categories");
-        CategorieEntity entity = categoryRepository.findById(dto.getId())
+        Category entity = categoryRepository.findById(dto.getId())
                 .orElseThrow(() -> new ErrorHandler(EnumError.CATEGORY_NOT_FOUND));
-        List<CategoryVM> children = null;
-        categoryMapper.partialUpdate(entity, dto);
+        List<CategoryAdminVM> children = null;
+        categoryAdminMapper.partialUpdate(entity, dto);
         if (dto.getChildren() != null && !dto.getChildren().isEmpty()) {
-            children = categoryVMMapper.toDto(saveChildren(dto, entity.getId()));
+            children = categoryAdminVMMapper.toDto(saveChildren(dto, entity));
         }
-        CategoryVM vm = categoryVMMapper.toDto(categoryRepository.save(entity));
+        CategoryAdminVM vm = categoryAdminVMMapper.toDto(categoryRepository.save(entity));
         vm.setChildren(children);
         return vm;
     }
@@ -61,7 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(List<Long> ids) {
         log.debug("Request to delete categories in list id");
         Map<Long, List<Long>> mapId = new HashMap<>();
-        ids.parallelStream().forEach(i -> mapId.put(i, toIdList(categoryRepository.findAllByParentCategoryId(i))));
+        ids.parallelStream().forEach(i -> mapId.put(i, toIdList(categoryRepository.findAllByParent_Id(i))));
         mapId.forEach((k, v) -> {
             categoryRepository.deleteAllById(v);
             categoryRepository.deleteById(k);
@@ -70,49 +72,44 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryVM getOneById(Long id) {
+    public CategoryAdminVM getOneById(Long id) {
         log.debug("Request to get category by id: {}", id);
-        return categoryVMMapper.toDto(categoryRepository.findById(id)
+        return categoryAdminVMMapper.toDto(categoryRepository.findById(id)
                 .orElseThrow(() -> new ErrorHandler(EnumError.CATEGORY_NOT_FOUND))
         );
     }
 
     @Override
-    public Paginate<CategoryVM> getAll(Pageable pageable) {
+    public Paginate<CategoryAdminVM> getAll(Pageable pageable) {
         log.debug("Request to find all categories");
-        return new PageUtil<CategoryVM>()
+        return new PageUtil<CategoryAdminVM>()
                 .toPaginateResponse(categoryRepository.findAll(pageable)
-                        .map(categoryVMMapper::toDto));
+                        .map(categoryAdminVMMapper::toDto));
     }
-  
-    private void saveCategories(List<CategoryDTO> categoryDTOList) {
-        categoryDTOList.parallelStream().forEach(c -> {
-            CategorieEntity entity = categoryMapper.toEntity(c);
+
+    @Override
+    public Category findById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new ErrorHandler(EnumError.CATEGORY_NOT_FOUND));
+    }
+
+    private void saveCategories(List<CategoryAdminDTO> categoryAdminDTOList) {
+        categoryAdminDTOList.parallelStream().forEach(c -> {
+            Category entity = categoryAdminMapper.toEntity(c);
             entity.setParentCategoryId(null);
             entity = categoryRepository.save(entity);
             log.info("Parent Id: {}", entity.getId());
-            saveChildren(c, entity.getId());
+            saveChildren(c, entity);
         });
     }
 
-    private List<CategorieEntity> saveChildren(CategoryDTO c, Long parentId) {
-        if (c.getChildren() == null || c.getChildren().isEmpty() || parentId == null) return null;
-        List<CategorieEntity> children = categoryMapper.toEntity(c.getChildren());
-        children.forEach(e -> e.setParentCategoryId(parentId));
+    private List<Category> saveChildren(CategoryAdminDTO c, Category parent) {
+        if (c.getChildren() == null || c.getChildren().isEmpty() || parent.getId() == null) return null;
+        List<Category> children = categoryAdminMapper.toEntity(c.getChildren());
+        children.forEach(e -> e.setParent(parent));
         return categoryRepository.saveAllAndFlush(children);
     }
 
-    private Paginate<CategoryVM> toPaginateResponse(Page<CategorieEntity> page) {
-        Paginate<CategoryVM> data = new Paginate<>();
-        data.setPageNumber(page.getNumber());
-        data.setData(categoryVMMapper.toDto(page.getContent()));
-        data.setPageSize(page.getSize());
-        data.setTotalPages(page.getTotalPages());
-        data.setTotalElements(page.getTotalElements());
-        return data;
-    }
-
-    private List<Long> toIdList(List<CategorieEntity> categories) {
-        return categories.stream().map(CategorieEntity::getId).toList();
+    private List<Long> toIdList(List<Category> categories) {
+        return categories.stream().map(Category::getId).toList();
     }
 }

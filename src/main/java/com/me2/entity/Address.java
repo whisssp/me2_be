@@ -1,11 +1,11 @@
 package com.me2.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,40 +15,41 @@ import java.util.Set;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressEntity extends AbstractAuditEntity implements Serializable {
+public class Address extends AbstractAuditEntity<Long> implements Serializable {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
+    
     @Column(name = "street_address", nullable = true, length = 255)
     private String streetAddress;
-    @Basic
+    
     @Column(name = "apartment", nullable = true, length = 100)
     private String apartment;
-    @Basic
+    
     @Column(name = "city", nullable = true, length = 100)
     private String city;
-    @Basic
+    
     @Column(name = "zip_code", nullable = true, length = 100)
     private String zipCode;
-    @Basic
+    
     @Column(name = "country", nullable = false, length = 100)
     private String country;
-    @Basic
+    
     @Column(name = "state", nullable = true, length = 100)
     private String state;
-    @Basic
+    
     @Column(name = "is_default", nullable = true)
     private Boolean isDefault;
-    @Basic
-    @Column(name = "user_id", nullable = true)
-    private Long userId;
 
-    @OneToMany(mappedBy = "addressId", fetch = FetchType.LAZY)
-    @JsonBackReference
-    private Set<RecipientEntity> recipentList;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"addresses", "carts", "orders"}, allowSetters = true)
+    private User user;
+
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"orders", "address"}, allowSetters = true)
+    private Set<Recipient> recipients;
 
     public Long getId() {
         return id;
@@ -114,12 +115,12 @@ public class AddressEntity extends AbstractAuditEntity implements Serializable {
         isDefault = aDefault;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUserId() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserId(User user) {
+        this.user = user;
     }
 
     @Override
@@ -127,7 +128,7 @@ public class AddressEntity extends AbstractAuditEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AddressEntity that = (AddressEntity) o;
+        Address that = (Address) o;
 
         if (id != that.id) return false;
         if (streetAddress != null ? !streetAddress.equals(that.streetAddress) : that.streetAddress != null)
@@ -138,7 +139,7 @@ public class AddressEntity extends AbstractAuditEntity implements Serializable {
         if (country != null ? !country.equals(that.country) : that.country != null) return false;
         if (state != null ? !state.equals(that.state) : that.state != null) return false;
         if (isDefault != null ? !isDefault.equals(that.isDefault) : that.isDefault != null) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
+        if (user != null ? !user.equals(that.user) : that.user != null) return false;
 
         return true;
     }
@@ -153,7 +154,7 @@ public class AddressEntity extends AbstractAuditEntity implements Serializable {
         result = 31 * result + (country != null ? country.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (isDefault != null ? isDefault.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
         return result;
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.me2.util.JsonConverter;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,21 +22,19 @@ public class ProductGalleryAdminDTO {
     @JsonIgnore
     private String images;
 
-    public void setImages(List<Object> imageList) {
-        if (imageList == null || imageList.isEmpty()) {
-            this.images = null;
-        }
-        this.images = JsonConverter.toJson(imageList);
+    public void setImageList(List<Object> images) {
+//        if (images == null || images.isEmpty()) {
+//            this.images = null;
+//        }
+        this.imageList = images;
+        this.images = JsonConverter.toJson(images);
     }
 
     public void setImages(String images) {
         this.images = images;
-    }
-
-    public String getImages() {
-        if (imageList != null && !imageList.isEmpty()) {
-            return JsonConverter.toJson(imageList);
-        }
-        return null;
+        this.imageList = JsonConverter.toObjectArray(images);
+//        if (images == null || images.isEmpty()) {
+//            this.imageList = new ArrayList<>();
+//        }
     }
 }

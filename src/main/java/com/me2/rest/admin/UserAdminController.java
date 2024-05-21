@@ -33,7 +33,7 @@ public class UserAdminController {
         return ResponseEntity.ok(userService.update(userDTO));
     }
 
-    @GetMapping("/users")
+    @GetMapping({"/users", "/user/list"})
     public ResponseEntity<Paginate<UserEntityVM>> getAllUser(Pageable pageable) {
         log.debug("Rest to get all user by admin");
         return ResponseEntity.ok(userService.getAllUsers(pageable));

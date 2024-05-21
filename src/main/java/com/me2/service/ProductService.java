@@ -1,18 +1,18 @@
 package com.me2.service;
 
 
-import com.me2.entity.ProductEntity;
+import com.me2.entity.Product;
 import com.me2.global.response.Paginate;
-import com.me2.rest.vm.ProductVM;
+import com.me2.rest.admin.vm.ProductAdminVM;
 import com.me2.service.dto.admin.ProductAdminDTO;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
-    ProductEntity save(ProductEntity entity);
+    Product save(Product entity);
 
-    ProductVM save(ProductAdminDTO productAdminDTO);
+    Product save(ProductAdminDTO productAdminDTO);
 
-    ProductVM getProductByIdForAdmin(Long id);
+    ProductAdminVM getProductByIdForAdmin(Long id);
 
-    Paginate<ProductVM> getAllProduct(Pageable pageable);
+    Paginate<ProductAdminVM> getAllProduct(Pageable pageable);
 }

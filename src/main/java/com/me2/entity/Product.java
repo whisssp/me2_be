@@ -1,9 +1,7 @@
 package com.me2.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.me2.global.enums.ActionStatus;
-import com.me2.global.enums.EnumProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,41 +16,50 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductEntity extends AbstractAuditEntity implements Serializable {
+public class Product extends AbstractAuditEntity<Long> implements Serializable {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private Long id;
-    @Basic
-    @Column(name = "category_id", nullable = false)
-    private Long categoryId;
-    @Basic
-    @Column(name = "promotion_id", nullable = true)
-    private Long promotionId;
-    @Basic
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    @JsonIgnoreProperties(value = {"children", "parent"}, allowSetters = true)
+    private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "promotion_id")
+    @JsonIgnoreProperties(value = {"orders", "products"}, allowSetters = true)
+    private Promotion promotion;
+
+   
     @Column(name = "name", nullable = true, length = 255)
     private String name;
-    @Basic
+
+   
     @Column(name = "summary", nullable = true, length = 255)
     private String summary;
-    @Basic
+
     @Column(name = "description", nullable = true, length = 255)
     private String description;
-    @Basic
+
+   
     @Column(name = "price", nullable = true, precision = 2)
     private BigDecimal price;
-    @Basic
+
+   
     @Column(name = "poster", nullable = true, length = 255)
     private String poster;
-    @Basic
+
+   
     @Column(name = "status", nullable = false, length = 255)
     @Enumerated(EnumType.STRING)
     private ActionStatus status;
 
-    @OneToMany(mappedBy = "productId", fetch = FetchType.LAZY)
-    @JsonBackReference
-    @JsonIgnore
-    private List<ProductVariantEntity> productVariantList;
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"product", "cartItems", "productGallery", "orderDetails"}, allowSetters = true)
+    private List<ProductVariant> productVariants;
 
     public Long getId() {
         return id;
@@ -62,20 +69,20 @@ public class ProductEntity extends AbstractAuditEntity implements Serializable {
         this.id = id;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public Long getPromotionId() {
-        return promotionId;
+    public Promotion getPromotion() {
+        return promotion;
     }
 
-    public void setPromotionId(Long promotionId) {
-        this.promotionId = promotionId;
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
     }
 
     public String getName() {
@@ -131,11 +138,11 @@ public class ProductEntity extends AbstractAuditEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProductEntity that = (ProductEntity) o;
+        Product that = (Product) o;
 
         if (id != that.id) return false;
-        if (categoryId != that.categoryId) return false;
-        if (promotionId != null ? !promotionId.equals(that.promotionId) : that.promotionId != null) return false;
+        if (category != that.category) return false;
+        if (promotion != null ? !promotion.equals(that.promotion) : that.promotion != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (summary != null ? !summary.equals(that.summary) : that.summary != null) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
@@ -149,8 +156,8 @@ public class ProductEntity extends AbstractAuditEntity implements Serializable {
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (int) (categoryId ^ (categoryId >>> 32));
-        result = 31 * result + (promotionId != null ? promotionId.hashCode() : 0);
+        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (promotion != null ? promotion.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (summary != null ? summary.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
