@@ -1,0 +1,116 @@
+package com.me2.jwt;
+
+import com.me2.entity.CustomUserDetails;
+import com.me2.repository.UserRepository;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.util.*;
+import java.util.stream.Collectors;
+
+@Component
+@Slf4j
+public class TokenProvider {
+    private final UserRepository userRepository;
+
+    public TokenProvider(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    private enum ClaimsKey {
+        AUTHORITY
+    }
+
+    private final Long JWT_EXPIRATION = 36000000L;
+
+    private final String JWT_SECRET = "aisjdfnpaisjdnfpasdpfasnvapsdoiasdnovnasodjnvoasd";
+
+    private final Long TOKEN_REMEMBER_ME_EXPIRATION = 2592000L;
+
+    public Authentication getAuthentication(String token) {
+        Claims claims = getClaims(token);
+
+        Collection<? extends GrantedAuthority> authorities = Arrays
+                .stream(claims.get(ClaimsKey.AUTHORITY.name()).toString().split(","))
+                .filter(auth -> !auth.trim().isEmpty())
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+        log.debug("------token------");
+        log.debug(token);
+        User principal = new User(claims.getSubject(), "", authorities);
+        log.debug(principal.getUsername());
+
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+
+    public String generateToken(Authentication authentication, Boolean rememberMe, String extraAuthorities) {
+        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
+        Date expiration = getExpiration(rememberMe);
+        JwtBuilder builder = Jwts.builder().subject(String.valueOf(userRepository.findFirstByEmail(authentication.getName()).getId()));
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(ClaimsKey.AUTHORITY.name(), authorities);
+        // Tạo chuỗi json web token từ id của user.
+        return builder
+                .issuedAt(new Date())
+                .expiration(expiration)
+                .claims(claims)
+                .signWith(getSecretKey(), Jwts.SIG.HS256)
+                .compact();
+    }
+
+    // Lấy thông tin user từ jwt
+    public String getSubject(String token) {
+        Claims claims = getClaims(token);
+        return (claims.getSubject());
+    }
+
+    public boolean validateToken(String authToken) {
+        try {
+            Jwts.parser().verifyWith(getSecretKey()).build().parseSignedClaims(authToken);
+            return true;
+        } catch (MalformedJwtException ex) {
+            log.error("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            log.error("Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            log.error("Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            log.error("JWT claims string is empty.");
+        }
+        return false;
+    }
+
+    private SecretKey getSecretKey() {
+        System.out.println(JWT_SECRET);
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_SECRET));
+    }
+
+    private Date getExpiration(Boolean rememberMe) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
+        if (rememberMe) {
+            expiryDate = new Date(now.getTime() + TOKEN_REMEMBER_ME_EXPIRATION);
+        }
+        return expiryDate;
+    }
+}
