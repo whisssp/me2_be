@@ -1,5 +1,6 @@
 package com.me2.service.impl;
 
+import com.me2.jwt.TokenProvider;
 import com.me2.rest.vm.LoginVM;
 import com.me2.rest.vm.UserEntityVM;
 import com.me2.entity.CustomUserDetails;
@@ -24,31 +25,29 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
     private final UserDetailsExtService userDetailsServiceExt;
 
-    @Autowired
     private final UserService userService;
 
-    @Autowired
     private final AuthenticationManager authenticationManager;
 
-    @Autowired
     private final JwtUtil jwtUtil;
 
-    @Autowired
     private final PasswordEncoder passwordEncoder;
+
+    private final TokenProvider tokenProvider;
 
     public AuthServiceImpl(UserDetailsExtService userDetailsServiceExt,
                            UserService userService,
                            AuthenticationManager authenticationManager,
                            JwtUtil jwtUtil,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder, TokenProvider tokenProvider) {
         this.userDetailsServiceExt = userDetailsServiceExt;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
@@ -63,8 +62,9 @@ public class AuthServiceImpl implements AuthService {
             log.error("Err/Login: {}", e.getMessage());
             throw new BadCredentialsException("Invalid Username or Password!");
         }
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String token = jwtUtil.generateToken(userDetails);
+//        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String token = jwtUtil.generateToken(userDetails);
+        String token = tokenProvider.generateToken(SecurityContextHolder.getContext().getAuthentication(), loginDTO.getRememberMe(), null);
         return new LoginVM(token);
     }
 

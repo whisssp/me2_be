@@ -26,6 +26,7 @@ public class UserDetailsExtServiceImpl implements UserDetailsExtService {
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
+
         return new CustomUserDetails(user);
     }
 
