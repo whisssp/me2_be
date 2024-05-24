@@ -2,6 +2,7 @@ package com.me2.service.dto.admin;
 
 import com.me2.global.enums.ActionStatus;
 import com.me2.global.enums.EnumPromotionType;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -33,6 +34,7 @@ public class PromotionAdminDTO {
     private String content;
 
     @NotNull
+    @Min(0)
     private Integer quantity;
 
     private Integer quantityUsed;

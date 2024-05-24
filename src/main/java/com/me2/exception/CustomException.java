@@ -8,13 +8,17 @@ import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class ErrorHandler extends RuntimeException implements Serializable {
+public class CustomException extends RuntimeException implements Serializable {
 
     private EnumError error;
 
-    public ErrorHandler(EnumError error) {
+    public CustomException(EnumError error) {
         super(error.getMessage());
         this.error = error;
     }
+
+//    public CustomException(String entity, String errorKey, String message) {
+//        super(entity, errorKey, message);
+//    }
 
 }

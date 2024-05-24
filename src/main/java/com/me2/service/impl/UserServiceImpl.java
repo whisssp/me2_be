@@ -1,7 +1,7 @@
 package com.me2.service.impl;
 
 import com.me2.entity.User;
-import com.me2.exception.ErrorHandler;
+import com.me2.exception.CustomException;
 import com.me2.global.enums.EnumError;
 import com.me2.global.enums.EnumUserAccountStatus;
 
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     public UserEntityVM update(UserUpdateDTO userDto) {
         log.debug("Request to update user with info: {}", userDto.toString());
         User user = userRepository.findById(userDto.getId()).orElseThrow(
-                () -> new ErrorHandler(EnumError.USER_NOT_FOUND));
+                () -> new CustomException(EnumError.USER_NOT_FOUND));
         userUpdateMapper.partialUpdate(user, userDto);
         return userVMMapper.toDto(userRepository.save(user));
     }
@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         log.debug("Request to delete user by id: {}", id);
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ErrorHandler(EnumError.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(EnumError.USER_NOT_FOUND));
         user.setStatus(EnumUserAccountStatus.DELETED);
         userRepository.save(user);
     }
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     public UserEntityVM getOneUserById(Long id) {
         log.debug("Request to get user by id: {}", id);
         return userVMMapper.toDto(userRepository.findById(id)
-                .orElseThrow(() -> new ErrorHandler(EnumError.USER_NOT_FOUND)));
+                .orElseThrow(() -> new CustomException(EnumError.USER_NOT_FOUND)));
     }
 
     @Override

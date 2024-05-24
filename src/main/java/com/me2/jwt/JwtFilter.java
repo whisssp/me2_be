@@ -1,19 +1,13 @@
 package com.me2.jwt;
 
-import com.me2.entity.CustomUserDetails;
 import com.me2.service.UserDetailsExtService;
-import com.me2.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -28,14 +22,16 @@ public class JwtFilter extends OncePerRequestFilter {
 
     public static final String BEARER_SUFFIX = "Bearer";
     private final UserDetailsExtService userDetailsExtService;
-    private final JwtUtil jwtUtil;
+//    private final JwtUtil jwtUtil;
 
-    private final TokenProvider tokenProvider;
+    private final JwtProvider jwtProvider;
 
-    public JwtFilter(UserDetailsExtService userDetailsExtService, JwtUtil jwtUtil, TokenProvider tokenProvider) {
+    public JwtFilter(UserDetailsExtService userDetailsExtService,
+//                     JwtUtil jwtUtil,
+                     JwtProvider jwtProvider) {
         this.userDetailsExtService = userDetailsExtService;
-        this.jwtUtil = jwtUtil;
-        this.tokenProvider = tokenProvider;
+//        this.jwtUtil = jwtUtil;
+        this.jwtProvider = jwtProvider;
     }
 
     @Override
@@ -47,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = getToken(request);
 
-        if (!jwtUtil.validateToken(token)) {
+        if (!jwtProvider.validateToken(token, request, response)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -71,7 +67,7 @@ public class JwtFilter extends OncePerRequestFilter {
 //        UsernamePasswordAuthenticationToken
 //                authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-        Authentication authentication = tokenProvider.getAuthentication(token);
+        Authentication authentication = jwtProvider.getAuthentication(token);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
 //        authentication.setDetails(
@@ -80,9 +76,9 @@ public class JwtFilter extends OncePerRequestFilter {
 //        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    private UserDetails getUserDetails(String token) {
-        return userDetailsExtService.loadUserById(jwtUtil.getSubject(token));
-    }
+//    private UserDetails getUserDetails(String token) {
+//        return userDetailsExtService.loadUserById(jwtUtil.getSubject(token));
+//    }
 
     private String getToken(HttpServletRequest request) {
         String header = request.getHeader(AUTHORIZATION_HEADER);
