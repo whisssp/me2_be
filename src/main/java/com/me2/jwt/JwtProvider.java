@@ -1,12 +1,13 @@
 package com.me2.jwt;
 
-import com.me2.entity.CustomUserDetails;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.me2.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,10 +21,10 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class TokenProvider {
+public class JwtProvider {
     private final UserRepository userRepository;
 
-    public TokenProvider(UserRepository userRepository) {
+    public JwtProvider(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -45,7 +46,6 @@ public class TokenProvider {
                 .filter(auth -> !auth.trim().isEmpty())
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-        log.debug("------token------");
         log.debug(token);
         User principal = new User(claims.getSubject(), "", authorities);
         log.debug(principal.getUsername());
@@ -84,18 +84,18 @@ public class TokenProvider {
         return (claims.getSubject());
     }
 
-    public boolean validateToken(String authToken) {
+    public boolean validateToken(String authToken, HttpServletRequest request, HttpServletResponse response) {
         try {
             Jwts.parser().verifyWith(getSecretKey()).build().parseSignedClaims(authToken);
             return true;
         } catch (MalformedJwtException ex) {
-            log.error("Invalid JWT token");
+            log.error("Invalid JWT token: {}", ex.getMessage());
         } catch (ExpiredJwtException ex) {
-            log.error("Expired JWT token");
+            log.error("Expired JWT token: {}", ex.getMessage());
         } catch (UnsupportedJwtException ex) {
-            log.error("Unsupported JWT token");
+            log.error("Unsupported JWT token: {}", ex.getMessage());
         } catch (IllegalArgumentException ex) {
-            log.error("JWT claims string is empty.");
+            log.error("JWT claims string is empty: {}", ex.getMessage());
         }
         return false;
     }

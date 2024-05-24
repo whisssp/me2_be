@@ -1,7 +1,7 @@
 package com.me2.service.impl;
 
 import com.me2.entity.Category;
-import com.me2.exception.ErrorHandler;
+import com.me2.exception.CustomException;
 import com.me2.global.enums.EnumError;
 import com.me2.repository.CategoryRepository;
 import com.me2.rest.admin.mapper.CategoryAdminVMMapper;
@@ -12,7 +12,6 @@ import com.me2.service.dto.admin.CategoryAdminDTO;
 import com.me2.service.mapper.admin.CategoryAdminMapper;
 import com.me2.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryAdminVM update(CategoryAdminDTO dto) {
         log.debug("Request to update categories");
         Category entity = categoryRepository.findById(dto.getId())
-                .orElseThrow(() -> new ErrorHandler(EnumError.CATEGORY_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(EnumError.CATEGORY_NOT_FOUND));
         List<CategoryAdminVM> children = null;
         categoryAdminMapper.partialUpdate(entity, dto);
         if (dto.getChildren() != null && !dto.getChildren().isEmpty()) {
@@ -75,7 +74,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryAdminVM getOneById(Long id) {
         log.debug("Request to get category by id: {}", id);
         return categoryAdminVMMapper.toDto(categoryRepository.findById(id)
-                .orElseThrow(() -> new ErrorHandler(EnumError.CATEGORY_NOT_FOUND))
+                .orElseThrow(() -> new CustomException(EnumError.CATEGORY_NOT_FOUND))
         );
     }
 
@@ -89,7 +88,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category findById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new ErrorHandler(EnumError.CATEGORY_NOT_FOUND));
+        return categoryRepository.findById(id).orElseThrow(() -> new CustomException(EnumError.CATEGORY_NOT_FOUND));
     }
 
     private void saveCategories(List<CategoryAdminDTO> categoryAdminDTOList) {
