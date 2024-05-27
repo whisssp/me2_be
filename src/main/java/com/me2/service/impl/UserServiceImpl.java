@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Paginate<UserEntityVM> getAllUsers(Pageable pageable) {
         log.debug("Request to get all users");
-        return new PageUtil<UserEntityVM>()
+        return PageUtil
                 .toPaginateResponse(userRepository.findAll(pageable)
                                     .map(userVMMapper::toDto));
     }

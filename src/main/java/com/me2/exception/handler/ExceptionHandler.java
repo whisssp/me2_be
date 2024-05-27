@@ -8,10 +8,13 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.net.URI;
 
 @RestControllerAdvice
+@EnableWebMvc
 public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(value = CustomException.class)
@@ -27,5 +30,15 @@ public class ExceptionHandler {
         problem.setDetail(e.getMessage());
         problem.setType(URI.create("me2/error"));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problem);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(org.springframework.web.servlet.NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ProblemDetail> handleNoHandlerFoundException(NoHandlerFoundException ex) {
+        ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+        problem.setTitle("NotFound");
+        problem.setDetail("Cannot find resource.");
+        problem.setType(URI.create("me2/error"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problem);
     }
 }

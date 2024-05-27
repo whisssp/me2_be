@@ -58,7 +58,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public Paginate<PromotionAdminVM> getPromotionWithFilterForAdmin(PromotionAdminFilterDTO filters, Pageable pageable) {
-        return new PageUtil<PromotionAdminVM>()
+        return PageUtil
                 .toPaginateResponse(promotionRepository
                         .findAllByFiltersForAdmin(filters, pageable)
                         .map(promotionAdminVMMapper::toDto)

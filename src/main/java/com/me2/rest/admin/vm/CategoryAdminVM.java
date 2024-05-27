@@ -12,7 +12,7 @@ public class CategoryAdminVM {
 
     private String name;
 
-    private CategoryAdminVM parent;
+    private Long parentId;
 
     private String slug;
 
