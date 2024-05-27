@@ -1,8 +1,9 @@
 package com.me2.config;
 
+import com.me2.exception.entry_point.CustomAccessDeniedEntryPoint;
+import com.me2.exception.entry_point.CustomBasicAuthenticationEntryPoint;
 import com.me2.global.enums.EnumUserRole;
 import com.me2.jwt.JwtFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,12 +11,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfiguration {
@@ -24,9 +24,17 @@ public class SecurityConfiguration {
 
     private final AuthenticationConfiguration configuration;
 
-    public SecurityConfiguration(JwtFilter jwtFilter, AuthenticationConfiguration configuration) {
+    private final CustomBasicAuthenticationEntryPoint authenticationEntryPoint;
+
+    private final CustomAccessDeniedEntryPoint accessDeniedEntryPoint;
+
+    public SecurityConfiguration(JwtFilter jwtFilter,
+                                 AuthenticationConfiguration configuration,
+                                 CustomBasicAuthenticationEntryPoint authenticationEntryPoint, CustomAccessDeniedEntryPoint accessDeniedEntryPoint) {
         this.jwtFilter = jwtFilter;
         this.configuration = configuration;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedEntryPoint = accessDeniedEntryPoint;
     }
 
     @Bean
@@ -79,9 +87,15 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "api/v0/admin/product/list").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "api/v0/admin/product").hasAuthority(EnumUserRole.ADMIN.name())
 
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(withDefaults());
+                .httpBasic(HttpBasicConfigurer::disable)
+                .exceptionHandling(e -> e
+                        .accessDeniedHandler(accessDeniedEntryPoint)
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                )
+        ;
         return http.build();
     }
 

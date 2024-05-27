@@ -1,7 +1,7 @@
 package com.me2.service.impl;
 
 import com.me2.entity.Promotion;
-import com.me2.exception.ErrorHandler;
+import com.me2.exception.CustomException;
 import com.me2.global.enums.ActionStatus;
 import com.me2.global.enums.EnumError;
 import com.me2.repository.PromotionRepository;
@@ -41,7 +41,7 @@ public class PromotionServiceImpl implements PromotionService {
     public void createForAdmin(PromotionAdminDTO dto) {
         log.debug("Request to create promotion - promotion_code: {}", dto.getCode());
         if (promotionRepository.findPromotionEntityByCode(dto.getCode()) != null)
-            throw new ErrorHandler(EnumError.PROMOTION_CODE_EXIST);
+            throw new CustomException(EnumError.PROMOTION_CODE_EXIST);
         Promotion entity = promotionAdminMapper.toEntity(dto);
         entity.setStatus(ActionStatus.WAITING_FOR_APPROVAL);
         entity.setIsActivated(false);
@@ -51,14 +51,14 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public PromotionAdminVM updateForAdmin(PromotionAdminDTO dto) {
         Promotion entity = promotionRepository.findById(dto.getId())
-                .orElseThrow(() -> new ErrorHandler(EnumError.PROMOTION_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(EnumError.PROMOTION_NOT_FOUND));
         promotionAdminMapper.partialUpdate(entity, dto);
         return promotionAdminVMMapper.toDto(promotionRepository.save(entity));
     }
 
     @Override
     public Paginate<PromotionAdminVM> getPromotionWithFilterForAdmin(PromotionAdminFilterDTO filters, Pageable pageable) {
-        return new PageUtil<PromotionAdminVM>()
+        return PageUtil
                 .toPaginateResponse(promotionRepository
                         .findAllByFiltersForAdmin(filters, pageable)
                         .map(promotionAdminVMMapper::toDto)
@@ -69,7 +69,7 @@ public class PromotionServiceImpl implements PromotionService {
     public PromotionAdminVM getPromotionByIdForAdmin(Long id) {
         log.debug("Request to get promotion by id: {}", id);
         return promotionAdminVMMapper.toDto(promotionRepository.findById(id)
-                .orElseThrow(() -> new ErrorHandler(EnumError.PROMOTION_NOT_FOUND)));
+                .orElseThrow(() -> new CustomException(EnumError.PROMOTION_NOT_FOUND)));
     }
 
     @Override
@@ -92,7 +92,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public Promotion findById(Long id) {
-        return promotionRepository.findById(id).orElseThrow(() -> new ErrorHandler(EnumError.PROMOTION_NOT_FOUND));
+        return promotionRepository.findById(id).orElseThrow(() -> new CustomException(EnumError.PROMOTION_NOT_FOUND));
     }
 
     private List<PromotionAdminVM> approveForAdmin(List<Long> ids) {

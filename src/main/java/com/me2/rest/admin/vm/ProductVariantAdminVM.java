@@ -1,5 +1,6 @@
 package com.me2.rest.admin.vm;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
@@ -17,5 +18,6 @@ public class ProductVariantAdminVM {
 
     private String name;
 
-    private List<ProductGalleryAdminVM> galleries;
+    @JsonProperty("galleries")
+    private List<ProductGalleryAdminVM> productGalleries;
 }

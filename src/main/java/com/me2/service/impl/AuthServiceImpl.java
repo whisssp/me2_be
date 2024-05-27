@@ -1,18 +1,15 @@
 package com.me2.service.impl;
 
-import com.me2.jwt.TokenProvider;
+import com.me2.jwt.JwtProvider;
 import com.me2.rest.vm.LoginVM;
 import com.me2.rest.vm.UserEntityVM;
-import com.me2.entity.CustomUserDetails;
 import com.me2.global.enums.EnumUserRole;
 import com.me2.service.AuthService;
 import com.me2.service.UserDetailsExtService;
 import com.me2.service.UserService;
 import com.me2.service.dto.LoginDTO;
 import com.me2.service.dto.UserDTO;
-import com.me2.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,23 +28,19 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
 
-    private final JwtUtil jwtUtil;
-
     private final PasswordEncoder passwordEncoder;
 
-    private final TokenProvider tokenProvider;
+    private final JwtProvider jwtProvider;
 
     public AuthServiceImpl(UserDetailsExtService userDetailsServiceExt,
                            UserService userService,
                            AuthenticationManager authenticationManager,
-                           JwtUtil jwtUtil,
-                           PasswordEncoder passwordEncoder, TokenProvider tokenProvider) {
+                           PasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
         this.userDetailsServiceExt = userDetailsServiceExt;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
-        this.tokenProvider = tokenProvider;
+        this.jwtProvider = jwtProvider;
     }
 
     @Override
@@ -64,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
         }
 //        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        String token = jwtUtil.generateToken(userDetails);
-        String token = tokenProvider.generateToken(SecurityContextHolder.getContext().getAuthentication(), loginDTO.getRememberMe(), null);
+        String token = jwtProvider.generateToken(SecurityContextHolder.getContext().getAuthentication(), loginDTO.getRememberMe(), null);
         return new LoginVM(token);
     }
 

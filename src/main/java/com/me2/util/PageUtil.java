@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class PageUtil<T> {
 
-    public Paginate<T> toPaginateResponse(Page<T> page) {
+    public static <T> Paginate<T> toPaginateResponse(Page<T> page) {
         Paginate<T> response = new Paginate<>();
 
         if (!page.isEmpty()) {

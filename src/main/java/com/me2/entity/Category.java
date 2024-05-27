@@ -23,16 +23,9 @@ public class Category extends AbstractAuditEntity<Long> implements Serializable 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_category_id")
-    @JsonIgnoreProperties(value = {"parent", "children", "products"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"products", "children", "parent"}, allowSetters = true)
     private Category parent;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "parent_category_id", insertable=false, updatable=false)
-//    @JsonBackReference
-//    @JsonIgnore
-//    private CategorieEntity parent;
-
-    
     @Column(name = "slug", nullable = true, length = 255)
     private String slug;
     
@@ -43,7 +36,7 @@ public class Category extends AbstractAuditEntity<Long> implements Serializable 
     private String description;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"products", "parent", "children"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"products", "children"}, allowSetters = true)
     private List<Category> children;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
@@ -62,7 +55,7 @@ public class Category extends AbstractAuditEntity<Long> implements Serializable 
         return parent;
     }
 
-    public void setParentCategoryId(Category parent) {
+    public void setParent(Category parent) {
         this.parent = parent;
     }
 
