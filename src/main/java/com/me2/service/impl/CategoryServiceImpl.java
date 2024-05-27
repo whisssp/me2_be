@@ -12,6 +12,7 @@ import com.me2.service.dto.admin.CategoryAdminDTO;
 import com.me2.service.mapper.admin.CategoryAdminMapper;
 import com.me2.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -73,17 +75,16 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryAdminVM getOneById(Long id) {
         log.debug("Request to get category by id: {}", id);
-        return categoryAdminVMMapper.toDto(categoryRepository.findById(id)
-                .orElseThrow(() -> new CustomException(EnumError.CATEGORY_NOT_FOUND))
-        );
+        Category c = categoryRepository.findById(id)
+                .orElseThrow(() -> new CustomException(EnumError.CATEGORY_NOT_FOUND));
+        return this.toCategoryVM(c);
     }
 
     @Override
     public Paginate<CategoryAdminVM> getAll(Pageable pageable) {
         log.debug("Request to find all categories");
-        return new PageUtil<CategoryAdminVM>()
-                .toPaginateResponse(categoryRepository.findAll(pageable)
-                        .map(categoryAdminVMMapper::toDto));
+        return PageUtil
+                .toPaginateResponse(categoryRepository.findAll(pageable).map(this::toCategoryVM));
     }
 
     @Override
@@ -94,7 +95,7 @@ public class CategoryServiceImpl implements CategoryService {
     private void saveCategories(List<CategoryAdminDTO> categoryAdminDTOList) {
         categoryAdminDTOList.parallelStream().forEach(c -> {
             Category entity = categoryAdminMapper.toEntity(c);
-            entity.setParentCategoryId(null);
+            entity.setParent(null);
             entity = categoryRepository.save(entity);
             log.info("Parent Id: {}", entity.getId());
             saveChildren(c, entity);
@@ -110,5 +111,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     private List<Long> toIdList(List<Category> categories) {
         return categories.stream().map(Category::getId).toList();
+    }
+
+    private CategoryAdminVM toCategoryVM(Category category) {
+        CategoryAdminVM vm = categoryAdminVMMapper.toDto(category);
+        if (category.getParent() != null) vm.setParentId(category.getParent().getId());
+        this.setParentId(vm, vm.getId());
+        return vm;
+    }
+
+    private void setParentId(CategoryAdminVM vm, Long parentId) {
+        if (vm.getChildren() == null) return;
+        vm.getChildren().forEach(c -> {
+            c.setParentId(parentId);
+            this.setParentId(c, c.getId());
+        });
     }
 }

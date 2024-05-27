@@ -25,6 +25,7 @@ public class AccessDeniedExceptionHandler implements Serializable {
         ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.FORBIDDEN);
         problem.setTitle("AccessDenied");
         problem.setInstance(URI.create(request.getRequestURI()));
+        problem.setDetail("You don't have permission to access this resource");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(problem);
     }
 }

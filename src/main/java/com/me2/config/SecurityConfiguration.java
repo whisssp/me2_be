@@ -87,10 +87,12 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "api/v0/admin/product/list").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "api/v0/admin/product").hasAuthority(EnumUserRole.ADMIN.name())
 
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(HttpBasicConfigurer::disable)
-                .exceptionHandling(e -> e.accessDeniedHandler(accessDeniedEntryPoint)
+                .exceptionHandling(e -> e
+                        .accessDeniedHandler(accessDeniedEntryPoint)
                         .authenticationEntryPoint(authenticationEntryPoint)
                 )
         ;
