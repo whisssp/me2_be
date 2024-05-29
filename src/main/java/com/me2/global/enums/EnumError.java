@@ -17,6 +17,9 @@ public enum EnumError {
     PRODUCT_NOT_FOUND("products", "NotFound", ""),
 
     PRODUCT_EXIST("products", "Exist", "Product existed"),
+
+    USER_REGISTER_FAILED("users", "RegisterFailed", "Register failed"),
+
     ;
 
     private String entity;

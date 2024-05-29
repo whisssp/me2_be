@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface UserService {
 
     UserEntityVM save(UserDTO userDTO, EnumUserRole role);
+    Optional<User> saveForUser(UserDTO userDTO);
+
 
     UserEntityVM update(UserUpdateDTO info);
 
@@ -21,4 +23,5 @@ public interface UserService {
     UserEntityVM getOneUserById(Long id);
 
     Paginate<UserEntityVM> getAllUsers(Pageable pageable);
+
 }
