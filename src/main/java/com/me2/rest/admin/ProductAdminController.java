@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v0")
 @Slf4j
@@ -46,5 +48,24 @@ public class ProductAdminController {
         return ResponseEntity.ok(productService.getAllProduct(pageable));
     }
 
+    @DeleteMapping("/admin/product")
+    public ResponseEntity<Void> removeProducts(@RequestBody List<Long> ids) {
+        log.debug("REST to remove products: {}", ids.toString());
+        productService.removeByIdsForAdmin(ids);
+        return ResponseEntity.noContent().build();
+    }
 
+    @PutMapping("/admin/product/active")
+    public ResponseEntity<Void> activeProduct(@RequestBody List<Long> ids) {
+        log.debug("REST to active products: {}", ids.toString());
+        productService.activeByIdsForAdmin(ids);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/admin/product/approve")
+    public ResponseEntity<Void> approveProduct(@RequestBody List<Long> ids) {
+        log.debug("REST to approve products: {}", ids.toString());
+        productService.approveByIdsForAdmin(ids);
+        return ResponseEntity.noContent().build();
+    }
 }

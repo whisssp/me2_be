@@ -5,6 +5,7 @@ import com.me2.entity.Product;
 import com.me2.entity.ProductVariant;
 import com.me2.entity.Promotion;
 import com.me2.exception.CustomException;
+import com.me2.global.enums.ActionStatus;
 import com.me2.global.enums.EnumError;
 import com.me2.global.response.Paginate;
 import com.me2.repository.ProductRepository;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -90,6 +92,8 @@ public class ProductServiceImpl implements ProductService {
             promotion = promotionService.findById(productAdminDTO.getPromotionId());
         entity.setCategory(category);
         entity.setPromotion(promotion);
+//        entity.setStatus(ActionStatus.WAITING_FOR_APPROVAL);
+//        entity.setIsActivated(false);
 //        entity.setProductVariants(variantAdminMapper.toEntity(new ArrayList<>(productAdminDTO.getProductVariants())));
         entity = productRepository.saveAndFlush(entity);
         return entity;
@@ -108,6 +112,43 @@ public class ProductServiceImpl implements ProductService {
         return PageUtil
                 .toPaginateResponse(productRepository.findAll(pageable)
                         .map(this::toProductAdminVM));
+    }
+
+    @Override
+    public void removeByIdsForAdmin(List<Long> ids) {
+        log.debug("Request to remove products: {}", ids);
+        List<Product> products = productRepository.findAllById(ids);
+        products.parallelStream().forEach(p -> {
+            p.setStatus(ActionStatus.DELETED);
+            p.setIsActivated(false);
+        });
+        productRepository.saveAll(products);
+    }
+
+    @Override
+    public void activeByIdsForAdmin(List<Long> ids) {
+        log.debug("Request to set active products: {}", ids);
+        List<Product> products = productRepository.findAllById(ids)
+                .parallelStream()
+                .peek(p -> {
+                    if (p.getStatus().equals(ActionStatus.WAITING_FOR_APPROVAL) || p.getStatus().equals(ActionStatus.DELETED))
+                        throw new CustomException(EnumError.PRODUCT_ACTIVATED_FAILED);
+                    p.setIsActivated(true);
+                }).toList();
+        productRepository.saveAll(products);
+    }
+
+    @Override
+    public void approveByIdsForAdmin(List<Long> ids) {
+        log.debug("Request to approve products: {}", ids);
+        List<Product> products = productRepository.findAllById(ids)
+                .parallelStream()
+                .peek(p -> {
+                    if (!p.getStatus().equals(ActionStatus.WAITING_FOR_APPROVAL))
+                        throw new CustomException(EnumError.PRODUCT_APPROVAL_FAILED);
+                    p.setStatus(ActionStatus.APPROVAL);
+                }).toList();
+        productRepository.saveAll(products);
     }
 
     private void saveVariants(Product product, ProductAdminDTO dto) {
