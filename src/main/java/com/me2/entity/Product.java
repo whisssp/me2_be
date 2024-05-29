@@ -57,6 +57,9 @@ public class Product extends AbstractAuditEntity<Long> implements Serializable {
     @Enumerated(EnumType.STRING)
     private ActionStatus status;
 
+    @Column(name = "is_activated", nullable = true, length = 255)
+    private Boolean isActivated;
+
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"product", "cartItems", "productGallery", "orderDetails"}, allowSetters = true)
     private List<ProductVariant> productVariants;
@@ -131,6 +134,14 @@ public class Product extends AbstractAuditEntity<Long> implements Serializable {
 
     public void setStatus(ActionStatus status) {
         this.status = status;
+    }
+
+    public Boolean getIsActivated() {
+        return isActivated;
+    }
+
+    public void setIsActivated(Boolean isActivated) {
+        this.isActivated = isActivated;
     }
 
     @Override

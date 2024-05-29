@@ -66,5 +66,12 @@
                 referencedColumnNames="id"
         />
     </changeSet>
+    <changeSet id="add-column-is_activated" author="whisper">
+        <addColumn tableName="products">
+            <column name="is_activated" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

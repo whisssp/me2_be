@@ -28,6 +28,8 @@ public class ProductAdminDTO {
 
     private ActionStatus status;
 
+    private Boolean isActivated;
+
     @NotNull
     private BigDecimal price;
 
