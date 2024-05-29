@@ -1,5 +1,6 @@
 package com.me2.rest.user;
 
+import com.me2.global.enums.EnumUserRole;
 import com.me2.rest.vm.LoginVM;
 import com.me2.rest.vm.UserEntityVM;
 import com.me2.service.AuthService;
@@ -38,7 +39,7 @@ public class AuthCustomerController {
     public ResponseEntity<UserEntityVM> register(@Valid @RequestBody UserDTO userDTO) {
         log.debug("Rest to register user account");
 
-        return ResponseEntity.ok(authService.register(userDTO, null));
+        return ResponseEntity.ok(authService.register(userDTO, EnumUserRole.USER));
     }
 
     @PostMapping("/test")

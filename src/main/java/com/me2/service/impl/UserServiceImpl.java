@@ -21,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -50,6 +52,14 @@ public class UserServiceImpl implements UserService {
         newUser.setRole(role != null ? role : EnumUserRole.USER);
         newUser.setStatus(EnumUserAccountStatus.ACTIVATED);
         return userVMMapper.toDto(userRepository.save(newUser));
+    }
+
+    @Override
+    public Optional<User> saveForUser(UserDTO userDTO) {
+        User newUser = userMapper.toEntity(userDTO);
+        newUser.setRole(EnumUserRole.USER);
+        newUser.setStatus(EnumUserAccountStatus.ACTIVATED);
+        return Optional.of(userRepository.save(newUser));
     }
 
     @Override
