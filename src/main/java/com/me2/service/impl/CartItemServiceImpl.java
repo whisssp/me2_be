@@ -35,6 +35,11 @@ public class CartItemServiceImpl implements CartItemService {
         return saveCartItem(savePV(dto.getPvId()), dto);
     }
 
+    @Override
+    public CartItem findCartItemById(Long id) {
+        return cartItemRepository.findById(id).get();
+    }
+
     private ProductVariant savePV(Long id) {
         return productVariantService.savePVforCartItem(id);
     }
