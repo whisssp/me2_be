@@ -86,6 +86,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "api/v0/admin/product").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "api/v0/admin/product/list").hasAuthority(EnumUserRole.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "api/v0/admin/product").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "api/v0/admin/product/active").hasAuthority(EnumUserRole.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "api/v0/admin/product/approve").hasAuthority(EnumUserRole.ADMIN.name())
 
                         .anyRequest().permitAll()
                 )
