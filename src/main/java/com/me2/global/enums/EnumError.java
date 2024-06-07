@@ -25,11 +25,14 @@ public enum EnumError {
 
     PRODUCT_EXIST("products", "Exist", "Product existed"),
 
+    USER_REGISTER_FAILED("users", "RegisterFailed", "Register failed"),
+  
+    PRODUCT_VARIANT_ID_NOT_FOUND("product_variants", "NotFound", "Id not found"),
+  
     PRODUCT_ACTIVATED_FAILED("products", "ActiveFailed", "Product must be approved"),
 
     PRODUCT_APPROVAL_FAILED("products", "ApproveFailed", "Product has been already deleted"),
-
-
+  
     ;
 
     private String entity;

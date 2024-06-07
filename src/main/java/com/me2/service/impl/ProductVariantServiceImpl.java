@@ -2,6 +2,8 @@ package com.me2.service.impl;
 
 import com.me2.entity.ProductGallery;
 import com.me2.entity.ProductVariant;
+import com.me2.exception.CustomException;
+import com.me2.global.enums.EnumError;
 import com.me2.repository.ProductVariantRepository;
 import com.me2.rest.admin.vm.ProductVariantAdminVM;
 import com.me2.service.ProductGalleryService;
@@ -39,6 +41,12 @@ public class ProductVariantServiceImpl implements ProductVariantService {
             log.info(">>>VARIANT-saved={}", entity);
             this.saveGallery(entity.getId(), e.getProductGalleries());
         });
+    }
+
+    @Override
+    public ProductVariant savePVforCartItem(Long id) {
+        if(id == null) throw new CustomException(EnumError.PRODUCT_VARIANT_ID_NOT_FOUND);
+        return variantRepository.findById(id).get();
     }
 
     @Override
