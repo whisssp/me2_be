@@ -7,10 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 public class CartItemUserDTO {
-    @NotNull
     private Long cartId;
-    @NotNull
     private Long pvId;
     private int quantity;
-    private BigDecimal price;
 }

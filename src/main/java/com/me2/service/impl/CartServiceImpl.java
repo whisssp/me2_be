@@ -4,6 +4,7 @@ import com.me2.entity.Cart;
 import com.me2.entity.CartItem;
 import com.me2.exception.CustomException;
 import com.me2.global.enums.EnumError;
+import com.me2.repository.CartItemRepository;
 import com.me2.repository.CartRepository;
 import com.me2.rest.user.mapper.CartItemUserVMMapper;
 import com.me2.rest.user.mapper.CartUserVMMapper;
@@ -11,6 +12,7 @@ import com.me2.rest.user.mapper.ProductVariantUserVMMapper;
 import com.me2.rest.user.vm.CartItemUserVM;
 import com.me2.rest.user.vm.CartUserVM;
 import com.me2.rest.user.vm.ProductVariantUserVM;
+import com.me2.service.CartAndCartItemService;
 import com.me2.service.CartItemService;
 import com.me2.service.CartService;
 import com.me2.service.ProductVariantService;
@@ -22,7 +24,7 @@ import java.util.Optional;
 @Service
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
-    private final CartItemService cartItemService;
+    private final CartAndCartItemService cartAndCartItemService;
     private final CartUserVMMapper cartUserVMMapper;
     private final CartItemUserVMMapper cartItemUserVMMapper;
     private final ProductVariantService productVariantService;
@@ -30,9 +32,11 @@ public class CartServiceImpl implements CartService {
 
 
 
-    public CartServiceImpl(CartRepository cartRepository, CartItemService cartItemService, CartUserVMMapper cartUserVMMapper, CartItemUserVMMapper cartItemUserVMMapper, ProductVariantService productVariantService, ProductVariantUserVMMapper productVariantUserVMMapper) {
+    public CartServiceImpl(CartRepository cartRepository, CartAndCartItemService cartAndCartItemService,
+                            CartUserVMMapper cartUserVMMapper, CartItemUserVMMapper cartItemUserVMMapper,
+                           ProductVariantService productVariantService, ProductVariantUserVMMapper productVariantUserVMMapper) {
         this.cartRepository = cartRepository;
-        this.cartItemService = cartItemService;
+        this.cartAndCartItemService = cartAndCartItemService;
         this.cartUserVMMapper = cartUserVMMapper;
         this.cartItemUserVMMapper = cartItemUserVMMapper;
         this.productVariantService = productVariantService;
@@ -44,21 +48,27 @@ public class CartServiceImpl implements CartService {
         cartRepository.save(cart);
     }
 
+//    @Override
+//    public CartUserVM getCartItemForCart(Long id) {
+//        Optional<Cart> findCart = cartRepository.findById(id);
+//        if(findCart.isEmpty()) throw new CustomException(EnumError.CART_NOT_FOUND);
+//
+//        List<CartItemUserVM> cartItem = cartItemUserVMMapper.toDto(findCart.get().getCartItems());
+//        cartItem.forEach((cart) -> {
+//            Optional<CartItem> c = cartAndCartItemService.findCartItemById(cart.getId());
+//            ProductVariantUserVM productVariantUserVM = productVariantUserVMMapper.toDto(productVariantService.savePVForCartItem(c.get().getProductVariant().getId()));
+//            productVariantUserVM.setProductId(c.get().getProductVariant().getId());
+//            cart.setVariantUserVM(productVariantUserVM);
+//        });
+//
+//        CartUserVM cart = cartUserVMMapper.toDto(findCart.get());
+//        cart.setCartItem(cartItem);
+//
+//        return cart;
+//    }
+
     @Override
     public CartUserVM getCartItemForCart(Long id) {
-        Optional<Cart> findCart = cartRepository.findById(id);
-        if(findCart.isEmpty()) throw new CustomException(EnumError.CART_NOT_FOUND);
-
-        List<CartItemUserVM> cartItem = cartItemUserVMMapper.toDto(findCart.get().getCartItems());
-        cartItem.forEach((cart) -> {
-            CartItem c = cartItemService.findCartItemById(cart.getId());
-            ProductVariantUserVM productVariantUserVM = productVariantUserVMMapper.toDto(productVariantService.savePVforCartItem(c.getProductVariant().getId()));
-            cart.setVariantUserVM(productVariantUserVM);
-        });
-
-        CartUserVM cart = cartUserVMMapper.toDto(findCart.get());
-        cart.setCartItem(cartItem);
-
-        return cart;
+        return cartUserVMMapper.toDto(cartRepository.findById(id).orElseThrow(()-> new CustomException(EnumError.CART_NOT_FOUND)));
     }
 }

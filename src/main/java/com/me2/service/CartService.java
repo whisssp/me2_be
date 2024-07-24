@@ -6,6 +6,6 @@ import com.me2.service.dto.user.CartUserDTO;
 
 public interface CartService {
     void saveForUser(Cart cart);
-
     CartUserVM getCartItemForCart(Long id);
+
 }

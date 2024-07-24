@@ -44,7 +44,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
     }
 
     @Override
-    public ProductVariant savePVforCartItem(Long id) {
+    public ProductVariant savePVForCartItem(Long id) {
         if(id == null) throw new CustomException(EnumError.PRODUCT_VARIANT_ID_NOT_FOUND);
         return variantRepository.findById(id).get();
     }
