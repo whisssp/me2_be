@@ -31,7 +31,9 @@ public enum EnumError {
 
     PRODUCT_APPROVAL_FAILED("products", "ApproveFailed", "Product has been already deleted"),
 
+    // Cart
     CART_NOT_FOUND("carts", "Not Found", "Cart not found"),
+    CART_ITEM_ALREADY_EXIST("carts", "Already Exist", "Cart item already exist"),
     ;
 
     private String entity;

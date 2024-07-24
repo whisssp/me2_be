@@ -1,2 +1,5 @@
-package com.me2.global.enums;public enum EnumCartItemStatus {
+package com.me2.global.enums;
+
+public enum EnumCartItemStatus {
+    ADD, UPDATE
 }

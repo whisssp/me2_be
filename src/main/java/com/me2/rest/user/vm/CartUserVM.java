@@ -10,7 +10,7 @@ import java.util.List;
 public class CartUserVM {
     private Long id;
 
-    private List<CartItemUserVM> cartItem;
+    private List<CartItemUserVM> cartItems;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", shape = JsonFormat.Shape.STRING, timezone = "UTC")
     private Instant createdDate;

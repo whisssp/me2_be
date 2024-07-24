@@ -13,7 +13,7 @@ public class CartItemUserVM {
 
     private Long cartId;
 
-    private ProductVariantUserVM variantUserVM;
+    private ProductVariantUserVM productVariant;
 
     private int quantity;
 

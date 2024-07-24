@@ -5,6 +5,6 @@ import com.me2.rest.user.vm.CartUserVM;
 import com.me2.service.mapper.EntityMapper;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {CartItemUserVMMapper.class})
+@Mapper(componentModel = "spring", uses = {CartItemUserVMMapper.class, ProductVariantUserVMMapper.class})
 public interface CartUserVMMapper extends EntityMapper<CartUserVM, Cart>{
 }

@@ -11,7 +11,7 @@ public interface ProductVariantService {
 
     void save(Set<ProductVariantAdminDTO> variantAdminDTO);
 
-    ProductVariant savePVforCartItem(Long id);
+    ProductVariant savePVForCartItem(Long id);
 
     List<ProductVariantAdminVM> getVariantsByProdId(Long id);
 }
