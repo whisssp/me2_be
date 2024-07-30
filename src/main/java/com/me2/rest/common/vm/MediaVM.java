@@ -1,4 +1,4 @@
-package com.me2.rest.vm;
+package com.me2.rest.common.vm;
 
 
 //{

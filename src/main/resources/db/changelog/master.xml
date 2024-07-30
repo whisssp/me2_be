@@ -16,6 +16,7 @@
     <include file="/db/changelog/cart_changelog.xml"/>
     <include file="/db/changelog/cart_item_changelog.xml"/>
     <include file="/db/changelog/order_details_changelog.xml"/>
+    <include file="/db/changelog/verification_token_changelog.xml"/>
 
     <include file="/db/changelog/alter-audit.xml"/>
 </databaseChangeLog>

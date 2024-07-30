@@ -28,7 +28,7 @@ public class ExceptionHandler {
         ProblemDetail problem = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         problem.setTitle("INTERNAL_SERVER_ERROR");
         problem.setDetail(e.getMessage());
-        problem.setType(URI.create("me2/error"));
+        problem.setType(URI.create("/me2/error"));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problem);
     }
 

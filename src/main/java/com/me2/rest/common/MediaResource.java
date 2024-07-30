@@ -1,6 +1,5 @@
-package com.me2.rest.media;
+package com.me2.rest.common;
 
-import com.me2.entity.Media;
 import com.me2.service.CloudinaryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

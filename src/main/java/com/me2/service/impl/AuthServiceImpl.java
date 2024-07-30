@@ -5,9 +5,9 @@ import com.me2.entity.User;
 import com.me2.exception.CustomException;
 import com.me2.global.enums.EnumError;
 import com.me2.jwt.JwtProvider;
-import com.me2.rest.mapper.UserVMMapper;
-import com.me2.rest.vm.LoginVM;
-import com.me2.rest.vm.UserEntityVM;
+import com.me2.rest.common.mapper.UserVMMapper;
+import com.me2.rest.common.vm.LoginVM;
+import com.me2.rest.common.vm.UserEntityVM;
 import com.me2.global.enums.EnumUserRole;
 import com.me2.service.AuthService;
 import com.me2.service.CartService;
@@ -15,7 +15,6 @@ import com.me2.service.UserDetailsExtService;
 import com.me2.service.UserService;
 import com.me2.service.dto.LoginDTO;
 import com.me2.service.dto.UserDTO;
-import com.me2.service.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -26,8 +25,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @Slf4j
