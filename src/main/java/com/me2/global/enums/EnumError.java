@@ -34,8 +34,12 @@ public enum EnumError {
     // Cart
     CART_NOT_FOUND("carts", "Not Found", "Cart not found"),
     CART_ITEM_ALREADY_EXIST("carts", "Already Exist", "Cart item already exist"),
-    ;
 
+
+    // ResetPassword_Token
+    CODE_RESET_WRONG("reset_password_tokens", "Not found or Not Exist", "Reset password token is invalid or not found"),
+    CODE_RESET_EXPIRED("reset_password_tokens", "Expired", "Reset password token has expired"),
+    ;
     private String entity;
 
     private String errorKey;

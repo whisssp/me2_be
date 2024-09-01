@@ -1,6 +1,8 @@
 package com.me2.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.me2.exception.CustomException;
+import com.me2.global.enums.EnumError;
 import com.me2.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
@@ -77,6 +80,30 @@ public class JwtProvider {
                 .signWith(getSecretKey(), Jwts.SIG.HS256)
                 .compact();
     }
+
+    //Generate token for reset password. gwen
+//    public String generateTokenForPasswordReset(String email) {
+//        com.me2.entity.User user = userRepository.findFirstByEmail(email);
+//        if (user == null) {
+//            throw new CustomException(EnumError.USER_NOT_FOUND);
+//        }
+//
+//        Date now = new Date();
+//        Date expirationDate = new Date(now.getTime() + TimeUnit.MINUTES.toMillis(5));
+//
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("action", "RESET_PASSWORD");
+//
+//        JwtBuilder builder = Jwts.builder()
+//                .subject(String.valueOf(user.getId()))
+//                .issuedAt(new Date())
+//                .expiration(expirationDate)
+//                .signWith(getSecretKey(), Jwts.SIG.HS256);
+//
+//        return builder
+//                .claims(claims)
+//                .compact();
+//    }
 
     // Lấy thông tin user từ jwt
     public String getSubject(String token) {

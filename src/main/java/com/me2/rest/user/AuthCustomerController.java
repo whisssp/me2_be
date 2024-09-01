@@ -5,15 +5,15 @@ import com.me2.rest.common.vm.LoginVM;
 import com.me2.rest.common.vm.UserEntityVM;
 import com.me2.service.AuthService;
 import com.me2.service.dto.LoginDTO;
+import com.me2.service.dto.NewPasswordDTO;
+import com.me2.service.dto.ResetPasswordDTO;
 import com.me2.service.dto.UserDTO;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v0/customer")
@@ -48,4 +48,19 @@ public class AuthCustomerController {
 
         return ResponseEntity.ok("Login");
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestBody String email) throws MessagingException {
+        log.debug("Rest to forgot-password email");
+
+        return ResponseEntity.ok(authService.forgotPassword(email));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody NewPasswordDTO dto) {
+        log.debug("Rest to reset-password email");
+
+        return ResponseEntity.ok(authService.resetPassword(dto));
+    }
+
 }

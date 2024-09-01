@@ -22,7 +22,7 @@ public class MailServiceImpl implements MailService {
         MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(body);
+        helper.setText(body, true);
         mailSender.send(message);
     }
 }

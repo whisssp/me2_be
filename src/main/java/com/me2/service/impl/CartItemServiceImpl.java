@@ -1,28 +1,22 @@
 package com.me2.service.impl;
 
-import com.me2.entity.Cart;
 import com.me2.entity.CartItem;
 import com.me2.entity.ProductVariant;
 import com.me2.exception.CustomException;
-import com.me2.global.enums.EnumCartItemStatus;
 import com.me2.global.enums.EnumError;
 import com.me2.repository.CartItemRepository;
 import com.me2.repository.CartRepository;
 import com.me2.rest.user.mapper.CartItemUserVMMapper;
 import com.me2.rest.user.mapper.ProductVariantUserVMMapper;
 import com.me2.rest.user.vm.CartItemUserVM;
-import com.me2.service.CartAndCartItemService;
 import com.me2.service.CartItemService;
-import com.me2.service.CartService;
 import com.me2.service.ProductVariantService;
 import com.me2.service.dto.user.CartItemUserDTO;
 import com.me2.service.mapper.user.CartItemUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -32,20 +26,16 @@ public class CartItemServiceImpl implements CartItemService {
     private final ProductVariantService productVariantService;
     private final CartItemRepository cartItemRepository;
     private final ProductVariantUserVMMapper productVariantUserVMMapper;
-    private final CartAndCartItemService cartAndCartItemService;
-    private final CartRepository cartRepository;
 
 
     public CartItemServiceImpl(CartItemUserMapper cartItemUserMapper, CartItemUserVMMapper cartItemUserVMMapper,
                                ProductVariantService productVariantService, CartItemRepository cartItemRepository,
-                               ProductVariantUserVMMapper productVariantUserVMMapper, CartAndCartItemService cartAndCartItemService, CartRepository cartRepository) {
+                               ProductVariantUserVMMapper productVariantUserVMMapper) {
         this.cartItemUserMapper = cartItemUserMapper;
         this.cartItemUserVMMapper = cartItemUserVMMapper;
         this.productVariantService = productVariantService;
         this.cartItemRepository = cartItemRepository;
         this.productVariantUserVMMapper = productVariantUserVMMapper;
-        this.cartAndCartItemService = cartAndCartItemService;
-        this.cartRepository = cartRepository;
     }
 
     @Override

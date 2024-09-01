@@ -19,4 +19,5 @@
     <include file="/db/changelog/verification_token_changelog.xml"/>
 
     <include file="/db/changelog/alter-audit.xml"/>
+    <include file="/db/changelog/password_reset_token.xml"/>
 </databaseChangeLog>

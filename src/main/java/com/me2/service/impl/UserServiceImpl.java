@@ -19,6 +19,7 @@ import com.me2.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -51,7 +52,7 @@ public class UserServiceImpl implements UserService {
         User newUser = userMapper.toEntity(userDTO);
         newUser.setRole(role != null ? role : EnumUserRole.USER);
         newUser.setStatus(EnumUserAccountStatus.ACTIVATED);
-        return userVMMapper.toDto(userRepository.save(newUser));
+        return userVMMapper.toDto(saving(newUser));
     }
 
     @Override
@@ -59,7 +60,21 @@ public class UserServiceImpl implements UserService {
         User newUser = userMapper.toEntity(userDTO);
         newUser.setRole(EnumUserRole.USER);
         newUser.setStatus(EnumUserAccountStatus.ACTIVATED);
-        return Optional.of(userRepository.save(newUser));
+        Optional<User> optionalUser = Optional.of(saving(newUser));
+        updateAudit(optionalUser.orElse(null));
+        return optionalUser;
+    }
+
+    @Override
+    public void saveForResetPassword(User user) {
+        userRepository.save(user);
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        User user = userRepository.findFirstByEmail(email);
+        if (user == null) throw new CustomException(EnumError.USER_NOT_FOUND);
+        return user;
     }
 
     @Override
@@ -68,7 +83,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userDto.getId()).orElseThrow(
                 () -> new CustomException(EnumError.USER_NOT_FOUND));
         userUpdateMapper.partialUpdate(user, userDto);
-        return userVMMapper.toDto(userRepository.save(user));
+        return userVMMapper.toDto(saving(user));
     }
 
     @Override
@@ -77,7 +92,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new CustomException(EnumError.USER_NOT_FOUND));
         user.setStatus(EnumUserAccountStatus.DELETED);
-        userRepository.save(user);
+        saving(user);
     }
 
     @Override
@@ -93,5 +108,17 @@ public class UserServiceImpl implements UserService {
         return PageUtil
                 .toPaginateResponse(userRepository.findAll(pageable)
                                     .map(userVMMapper::toDto));
+    }
+
+    @Async
+    protected void updateAudit(User user) {
+        if (user == null) return;
+        user.setCreatedBy(user.getId()+"");
+        user.setLastModifiedBy(user.getId()+"");
+        user.setLastModifiedDate(user.getLastModifiedDate());
+    }
+
+    private User saving(User user) {
+        return userRepository.save(user);
     }
 }

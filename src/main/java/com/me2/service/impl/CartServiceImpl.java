@@ -12,7 +12,6 @@ import com.me2.rest.user.mapper.ProductVariantUserVMMapper;
 import com.me2.rest.user.vm.CartItemUserVM;
 import com.me2.rest.user.vm.CartUserVM;
 import com.me2.rest.user.vm.ProductVariantUserVM;
-import com.me2.service.CartAndCartItemService;
 import com.me2.service.CartItemService;
 import com.me2.service.CartService;
 import com.me2.service.ProductVariantService;
@@ -24,7 +23,6 @@ import java.util.Optional;
 @Service
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
-    private final CartAndCartItemService cartAndCartItemService;
     private final CartUserVMMapper cartUserVMMapper;
     private final CartItemUserVMMapper cartItemUserVMMapper;
     private final ProductVariantService productVariantService;
@@ -32,11 +30,10 @@ public class CartServiceImpl implements CartService {
 
 
 
-    public CartServiceImpl(CartRepository cartRepository, CartAndCartItemService cartAndCartItemService,
+    public CartServiceImpl(CartRepository cartRepository,
                             CartUserVMMapper cartUserVMMapper, CartItemUserVMMapper cartItemUserVMMapper,
                            ProductVariantService productVariantService, ProductVariantUserVMMapper productVariantUserVMMapper) {
         this.cartRepository = cartRepository;
-        this.cartAndCartItemService = cartAndCartItemService;
         this.cartUserVMMapper = cartUserVMMapper;
         this.cartItemUserVMMapper = cartItemUserVMMapper;
         this.productVariantService = productVariantService;

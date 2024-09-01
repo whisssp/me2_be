@@ -13,8 +13,12 @@ import java.util.Optional;
 public interface UserService {
 
     UserEntityVM save(UserDTO userDTO, EnumUserRole role);
+
     Optional<User> saveForUser(UserDTO userDTO);
 
+    void saveForResetPassword(User user);
+
+    User findUserByEmail(String email);
 
     UserEntityVM update(UserUpdateDTO info);
 
