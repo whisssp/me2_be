@@ -1,7 +1,7 @@
 package com.me2.rest.admin;
 
-import com.me2.rest.vm.LoginVM;
-import com.me2.rest.vm.UserEntityVM;
+import com.me2.rest.common.vm.LoginVM;
+import com.me2.rest.common.vm.UserEntityVM;
 import com.me2.global.enums.EnumUserRole;
 import com.me2.service.AuthService;
 import com.me2.service.UserService;

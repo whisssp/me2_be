@@ -1,7 +1,7 @@
 package com.me2.rest.admin;
 
 import com.me2.global.response.Paginate;
-import com.me2.rest.vm.UserEntityVM;
+import com.me2.rest.common.vm.UserEntityVM;
 import com.me2.service.UserService;
 import com.me2.service.dto.UserUpdateDTO;
 import jakarta.validation.Valid;

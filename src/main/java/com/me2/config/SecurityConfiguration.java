@@ -4,6 +4,7 @@ import com.me2.exception.entry_point.CustomAccessDeniedEntryPoint;
 import com.me2.exception.entry_point.CustomBasicAuthenticationEntryPoint;
 import com.me2.global.enums.EnumUserRole;
 import com.me2.jwt.JwtFilter;
+import org.apache.http.protocol.HTTP;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -47,10 +48,13 @@ public class SecurityConfiguration {
                         requestMatchers(HttpMethod.POST, "/api/v0/media/public/upload/image").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v0/public/promotion/list").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v0/public/product/list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v0/verification/**").permitAll()
+
                         // customer - authentication
                         .requestMatchers(HttpMethod.POST, "/api/v0/customer/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v0/customer/authenticate").permitAll()
                         .requestMatchers("/api/v0/customer/test").hasAuthority(EnumUserRole.USER.name())
+
                         // admin - authenticaton
                         .requestMatchers(HttpMethod.POST,"/api/v0/admin/register").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v0/admin/authenticate").permitAll()

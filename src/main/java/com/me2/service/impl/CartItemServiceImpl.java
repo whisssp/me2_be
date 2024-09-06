@@ -5,6 +5,10 @@ import com.me2.entity.ProductVariant;
 import com.me2.exception.CustomException;
 import com.me2.global.enums.EnumError;
 import com.me2.repository.CartItemRepository;
+import com.me2.repository.CartRepository;
+import com.me2.rest.user.mapper.CartItemUserVMMapper;
+import com.me2.rest.user.mapper.ProductVariantUserVMMapper;
+import com.me2.rest.user.vm.CartItemUserVM;
 import com.me2.service.CartItemService;
 import com.me2.service.ProductVariantService;
 import com.me2.service.dto.user.CartItemUserDTO;
@@ -17,19 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-
 @Service
 @Slf4j
 public class CartItemServiceImpl implements CartItemService {
     private final CartItemUserMapper cartItemUserMapper;
     private final ProductVariantService productVariantService;
     private final CartItemRepository cartItemRepository;
+    private final ProductVariantUserVMMapper productVariantUserVMMapper;
 
 
-    public CartItemServiceImpl(CartItemUserMapper cartItemUserMapper, ProductVariantService productVariantService, CartItemRepository cartItemRepository) {
+    public CartItemServiceImpl(CartItemUserMapper cartItemUserMapper, CartItemUserVMMapper cartItemUserVMMapper,
+                               ProductVariantService productVariantService, CartItemRepository cartItemRepository,
+                               ProductVariantUserVMMapper productVariantUserVMMapper) {
+
         this.cartItemUserMapper = cartItemUserMapper;
         this.productVariantService = productVariantService;
         this.cartItemRepository = cartItemRepository;
+        this.productVariantUserVMMapper = productVariantUserVMMapper;
     }
 
     @Override

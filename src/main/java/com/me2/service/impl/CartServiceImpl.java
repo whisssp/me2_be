@@ -6,6 +6,8 @@ import com.me2.global.enums.EnumError;
 import com.me2.repository.CartRepository;
 import com.me2.rest.user.mapper.CartUserVMMapper;
 import com.me2.rest.user.vm.CartUserVM;
+import com.me2.rest.user.vm.ProductVariantUserVM;
+import com.me2.service.CartItemService;
 import com.me2.service.CartService;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,8 @@ public class CartServiceImpl implements CartService {
 
 
 
-    public CartServiceImpl(CartRepository cartRepository,
-                            CartUserVMMapper cartUserVMMapper) {
+    public CartServiceImpl(CartRepository cartRepository, CartUserVMMapper cartUserVMMapper, CartItemUserVMMapper cartItemUserVMMapper,
+                           ProductVariantService productVariantService, ProductVariantUserVMMapper productVariantUserVMMapper) {
         this.cartRepository = cartRepository;
         this.cartUserVMMapper = cartUserVMMapper;
     }
