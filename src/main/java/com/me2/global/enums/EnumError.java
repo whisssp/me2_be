@@ -34,6 +34,7 @@ public enum EnumError {
     // Cart
     CART_NOT_FOUND("carts", "Not Found", "Cart not found"),
     CART_ITEM_ALREADY_EXIST("carts", "Already Exist", "Cart item already exist"),
+    CART_ITEM_NOT_FOUND("carts", "Not found", "Cart item not found"),
 
 
     // ResetPassword_Token

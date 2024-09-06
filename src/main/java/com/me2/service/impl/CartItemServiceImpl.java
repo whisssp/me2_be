@@ -14,7 +14,10 @@ import com.me2.service.ProductVariantService;
 import com.me2.service.dto.user.CartItemUserDTO;
 import com.me2.service.mapper.user.CartItemUserMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -22,7 +25,6 @@ import java.util.Objects;
 @Slf4j
 public class CartItemServiceImpl implements CartItemService {
     private final CartItemUserMapper cartItemUserMapper;
-    private final CartItemUserVMMapper cartItemUserVMMapper;
     private final ProductVariantService productVariantService;
     private final CartItemRepository cartItemRepository;
     private final ProductVariantUserVMMapper productVariantUserVMMapper;
@@ -31,17 +33,30 @@ public class CartItemServiceImpl implements CartItemService {
     public CartItemServiceImpl(CartItemUserMapper cartItemUserMapper, CartItemUserVMMapper cartItemUserVMMapper,
                                ProductVariantService productVariantService, CartItemRepository cartItemRepository,
                                ProductVariantUserVMMapper productVariantUserVMMapper) {
+
         this.cartItemUserMapper = cartItemUserMapper;
-        this.cartItemUserVMMapper = cartItemUserVMMapper;
         this.productVariantService = productVariantService;
         this.cartItemRepository = cartItemRepository;
         this.productVariantUserVMMapper = productVariantUserVMMapper;
     }
 
     @Override
-    public CartItemUserVM save(CartItemUserDTO dto) {
-        if(dto.getCartId() == null) throw new CustomException(EnumError.CART_NOT_FOUND);
-        return saveCartItem(savePV(dto.getPvId()), dto);
+    @Transactional
+    public CartItem save(CartItemUserDTO dto) {
+        CartItem entity = null;
+        if(dto.getId() == null) {
+            entity = saveCartItem(dto);
+        } else {
+            entity = cartItemRepository.findById(dto.getId()).
+                    orElseThrow(() -> new CustomException(EnumError.CART_ITEM_NOT_FOUND));
+
+            initializeProxy(entity);
+
+            cartItemUserMapper.partialUpdate(entity, dto);
+
+            entity = cartItemRepository.save(entity);
+        }
+        return entity;
     }
 
     @Override
@@ -53,16 +68,15 @@ public class CartItemServiceImpl implements CartItemService {
         return productVariantService.savePVForCartItem(id);
     }
 
-    private CartItemUserVM saveCartItem(ProductVariant productVariant, CartItemUserDTO dto) {
-        productVariant.getCartItems().forEach(cartItem -> {
-            if(cartItem.getCartId() == dto.getCartId() && Objects.equals(cartItem.getProductVariant().getId(), productVariant.getId()))
-                throw new CustomException(EnumError.CART_ITEM_ALREADY_EXIST);
-        });
+    private CartItem saveCartItem(CartItemUserDTO dto) {
+        if(dto.getCartId() == null) throw new CustomException(EnumError.CART_NOT_FOUND);
         CartItem cartItem = cartItemUserMapper.toEntity(dto);
-        cartItem.setProductVariant(productVariant);
-        cartItem.setPrice(productVariant.getProduct().getPrice());
-        CartItemUserVM newCartItem = cartItemUserVMMapper.toDto(cartItemRepository.save(cartItem));
-        newCartItem.setProductVariant(productVariantUserVMMapper.toDto(productVariant));
-        return newCartItem;
+        return cartItemRepository.saveAndFlush(cartItem);
     }
+    private void initializeProxy(CartItem entity) {
+        if (entity instanceof HibernateProxy) {
+            Hibernate.initialize(entity.getProductVariant());
+        }
+    }
+
 }

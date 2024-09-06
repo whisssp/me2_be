@@ -1,5 +1,6 @@
 package com.me2.rest.user;
 
+import com.me2.entity.CartItem;
 import com.me2.rest.user.vm.CartItemUserVM;
 import com.me2.rest.user.vm.CartUserVM;
 import com.me2.service.CartItemService;
@@ -23,7 +24,7 @@ public class CartItemUserController {
     }
 
     @PostMapping("/cart/add")
-    public ResponseEntity<CartItemUserVM> addCartItem(@RequestBody CartItemUserDTO dto) {
+    public ResponseEntity<CartItem> addCartItem(@RequestBody CartItemUserDTO dto) {
         return ResponseEntity.ok(cartItemService.save(dto));
     }
 
