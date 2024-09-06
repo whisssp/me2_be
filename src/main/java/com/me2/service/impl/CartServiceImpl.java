@@ -4,11 +4,14 @@ import com.me2.entity.Cart;
 import com.me2.exception.CustomException;
 import com.me2.global.enums.EnumError;
 import com.me2.repository.CartRepository;
+import com.me2.rest.user.mapper.CartItemUserVMMapper;
 import com.me2.rest.user.mapper.CartUserVMMapper;
+import com.me2.rest.user.mapper.ProductVariantUserVMMapper;
 import com.me2.rest.user.vm.CartUserVM;
 import com.me2.rest.user.vm.ProductVariantUserVM;
 import com.me2.service.CartItemService;
 import com.me2.service.CartService;
+import com.me2.service.ProductVariantService;
 import org.springframework.stereotype.Service;
 
 @Service
