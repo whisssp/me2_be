@@ -25,7 +25,8 @@ public class CartItem extends AbstractAuditEntity<Long> implements Serializable 
     private Long cartId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = {"product", "cartItems", "orderDetails", "productGallery"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"product", "cartItems", "orderDetails", "productGallery",
+            "hibernateLazyInitializer", "handler"}, allowSetters = true)
     private ProductVariant productVariant;
     
     @Column(name = "quantity", nullable = false)
